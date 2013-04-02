@@ -1,0 +1,22 @@
+what,kind,bundleId,bundleVersion,description,time
+java.vendor,sysinfo,,,"Oracle Corporation",1364891333357
+java.version,sysinfo,,,"1.7.0",1364891333357
+java.vm.info,sysinfo,,,"mixed mode",1364891333357
+java.vm.name,sysinfo,,,"Java HotSpot(TM) 64-Bit Server VM",1364891333357
+java.vm.specification.name,sysinfo,,,"Java Virtual Machine Specification",1364891333357
+java.vm.specification.vendor,sysinfo,,,"Oracle Corporation",1364891333357
+java.vm.specification.version,sysinfo,,,"1.7",1364891333357
+java.vm.vendor,sysinfo,,,"Oracle Corporation",1364891333357
+java.vm.version,sysinfo,,,"21.0-b17",1364891333357
+started,bundle,org.eclipse.wb.discovery.ui,1.1.0.r37x201109091028,"org.eclipse.wb.discovery.ui",1364891334485
+started,bundle,org.eclipse.mylyn.team.ui,3.6.1.v20110825-0100,"org.eclipse.mylyn.team.ui",1364891334495
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1364891343004
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1364891351156
+activated,view,org.eclipse.ui.views,3.6.0.I20110412-0800,"org.eclipse.ui.views.ContentOutline",1364891354647
+closed,editor,org.eclipse.wst.xml.ui,1.1.201.v201108151912,"org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart",1364891354648
+closed,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1364891360960
+started,bundle,org.eclipse.compare,3.5.200.I20110525-0800,"org.eclipse.compare",1364891361182
+stopped,bundle,org.eclipse.jst.ws.axis.creation.ui,1.0.700.v201104070312,"org.eclipse.jst.ws.axis.creation.ui",1364891361465
+stopped,bundle,org.eclipse.jst.ws.axis.consumption.ui,1.0.505.v201004211805,"org.eclipse.jst.ws.axis.consumption.ui",1364891361468
+stopped,bundle,org.eclipse.jst.ws.axis.consumption.core,1.0.407.v201104071820,"org.eclipse.jst.ws.axis.consumption.core",1364891361471
+stopped,bundle,org.eclipse.jst.ws.axis2.creation.ui,1.0.104.v201004211805,"org.eclipse.jst.ws.axis2.creation.ui",1364891361473
