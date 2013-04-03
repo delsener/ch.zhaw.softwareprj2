@@ -1,8 +1,12 @@
 package ch.zhaw.dynsys.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
@@ -11,10 +15,8 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTitleAnnotation;
 import org.jfree.chart.axis.AxisLocation;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.YIntervalSeries;
@@ -22,33 +24,26 @@ import org.jfree.data.xy.YIntervalSeriesCollection;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.RectangleEdge;
 
-public class GraphPanel extends ChartPanel {
+import ch.zhaw.dynsys.simulation.SimulationListener;
+
+public class GraphPanel extends ChartPanel implements SimulationListener {
 	private static final long serialVersionUID = 1L;
+	
+	private double iteration = 0;
+	private YIntervalSeriesCollection datasets = new YIntervalSeriesCollection();
+	private JFreeChart chart;
+	private XYPlot plot;
 
 	public GraphPanel() {
 		super(null);
-
-		// data sets
-		YIntervalSeriesCollection xydataset = new YIntervalSeriesCollection();
-		YIntervalSeries zucker = new YIntervalSeries("Zucker");
-		YIntervalSeries hefe = new YIntervalSeries("Hefe");
-		YIntervalSeries baecker = new YIntervalSeries("Bäcker");
-		xydataset.addSeries(zucker);
-		xydataset.addSeries(hefe);
-		xydataset.addSeries(baecker);
-
-		for (int i = 0; i < 60; i++) {
-			zucker.add(i, 1000 - Math.pow(2, i), 0, 100);
-			hefe.add(i, Math.pow(2, i) - i * 4, 0, 100);
-			baecker.add(i, i * 27, 0, 100);
-		}
+		setPreferredSize(new Dimension(800, 600));
 
 		// chart
-		JFreeChart chart = ChartFactory.createTimeSeriesChart(null, null, null,
-				xydataset, false, false, false);
+		chart = ChartFactory.createTimeSeriesChart(null, null, null,
+				datasets, false, false, false);
 
 		// plot
-		XYPlot plot = (XYPlot) chart.getPlot();
+		plot = (XYPlot) chart.getPlot();
 
 		// colors
 		plot.setBackgroundPaint(Color.white);
@@ -76,5 +71,32 @@ public class GraphPanel extends ChartPanel {
 		setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
 		setChart(chart);
 	}
+
+	@Override
+	public void evolved(final double[] values) {
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {		    	
+		    	for (int i = 0; i < values.length; i++) {
+		    		if (i >= datasets.getSeriesCount()) {
+		    			datasets.addSeries(new YIntervalSeries(i));
+		    		}
+		    		YIntervalSeries dataset = datasets.getSeries(i);
+		    		dataset.add(iteration, values[i], 0, 0);
+		    	}
+		    	
+		    	// increase iteration
+		    	iteration++;
+		    	
+		    	// update chart
+		    	revalidate();
+		    	repaint();
+		    }
+		  });
+	}
+
+	@Override
+	public void started() {}
+	@Override
+	public void stoped() {}
 
 }

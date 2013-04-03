@@ -1,6 +1,5 @@
 package ch.zhaw.dynsys.gui;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -37,10 +36,13 @@ public class SettingsPanel extends JScrollPane {
 
 		JViewport viewport = getViewport();
 		viewport.add(p);
-		viewport.setPreferredSize(d);
+//		viewport.setPreferredSize(d);
 		
 		d.width += 50;
-		setPreferredSize(d);
+//		setPreferredSize(d);
+		
+		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	}
 	
 	private class AddListener implements ActionListener {
@@ -54,7 +56,7 @@ public class SettingsPanel extends JScrollPane {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			parent.add(new CulturePanel(), parent.getComponentCount() - 2);
+			parent.add(new CulturePanel(), parent.getComponentCount() - 1);
 			parent.revalidate();
 		}
 		

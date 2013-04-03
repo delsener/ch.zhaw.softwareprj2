@@ -8,10 +8,15 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
-public class Statusbar extends JPanel {
+import ch.zhaw.dynsys.simulation.SimulationListener;
+
+public class Statusbar extends JPanel implements SimulationListener {
+	private static final String READY = "Ready";
+	private static final String RUNNING = "Running";
+
 	private static final long serialVersionUID = 1L;
 	
-	private JLabel status = new JLabel("Ready");
+	private JLabel status = new JLabel(READY);
 
 	public Statusbar() {
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -20,5 +25,18 @@ public class Statusbar extends JPanel {
 		status.setHorizontalAlignment(SwingConstants.LEFT);
 		add(status);
 	}
+
+	@Override
+	public void started() {
+		status.setText(RUNNING);		
+	}
+
+	@Override
+	public void stoped() {
+		status.setText(READY);	
+	}
+
+	@Override
+	public void evolved(double[] values) {}
 
 }
