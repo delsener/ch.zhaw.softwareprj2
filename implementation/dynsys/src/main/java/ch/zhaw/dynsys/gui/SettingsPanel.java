@@ -18,36 +18,39 @@ public class SettingsPanel extends JScrollPane {
 
 	public SettingsPanel() {
 		JPanel p = new JPanel();
-		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
-		p.add(new CulturePanel());
-		p.add(new CulturePanel());
+		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));		
 		
+		ActionListener addLister = new AddListener(p);
 		
 		JButton add = new JButton("+");
 		add.setHorizontalAlignment(SwingConstants.RIGHT);
 		add.setBorder(new EmptyBorder(5, 5, 5, 5));
 		add.setContentAreaFilled(false);
-		add.addActionListener(new AddListener(p));
+		add.addActionListener(addLister);
 		p.add(add);
 		
-		Dimension d = new CulturePanel().getPreferredSize();
+		Dimension d = new Dimension(300, 100);
+		//Dimension d = new CulturePanel().getPreferredSize();
 		getVerticalScrollBar().setUnitIncrement(d.height);
-		d.height *= 10;
+		//d.height *= 10;
 
-		JViewport viewport = getViewport();
 		viewport.add(p);
-//		viewport.setPreferredSize(d);
+		viewport.setPreferredSize(d);
 		
-		d.width += 50;
+		//d.width += 50;
 //		setPreferredSize(d);
 		
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	    
+	    addLister.actionPerformed(null);
+	    addLister.actionPerformed(null);
 	}
 	
 	private class AddListener implements ActionListener {
+		private final static String ABC = "abcdefghijklmnopqrstuvwxyz";
 		private Container parent;
-		
+		private int i = 0;
 
 		public AddListener(Container parent) {
 			super();
@@ -56,7 +59,11 @@ public class SettingsPanel extends JScrollPane {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			parent.add(new CulturePanel(), parent.getComponentCount() - 1);
+			if (i >= ABC.length()) {
+				return;
+			}
+			
+			parent.add(new CulturePanel(String.valueOf(ABC.toCharArray()[i++])), parent.getComponentCount() - 1);
 			parent.revalidate();
 		}
 		

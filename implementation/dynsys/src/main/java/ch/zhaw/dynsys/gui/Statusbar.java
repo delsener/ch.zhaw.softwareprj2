@@ -39,4 +39,7 @@ public class Statusbar extends JPanel implements SimulationListener {
 	@Override
 	public void evolved(double[] values) {}
 
+	@Override
+	public void clear() {}
+
 }

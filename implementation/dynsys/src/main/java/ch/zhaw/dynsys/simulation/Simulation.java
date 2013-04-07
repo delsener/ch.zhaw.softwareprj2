@@ -58,4 +58,11 @@ public class Simulation {
 			}
 		}
 	}
+
+
+	public void clear() {
+		for (SimulationListener l : simulationListeners) {
+			l.clear();
+		}
+	}
 }

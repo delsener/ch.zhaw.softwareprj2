@@ -3,8 +3,7 @@ package ch.zhaw.dynsys.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
 
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
@@ -15,6 +14,14 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTitleAnnotation;
 import org.jfree.chart.axis.AxisLocation;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.DateTickUnit;
+import org.jfree.chart.axis.DateTickUnitType;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.TickUnit;
+import org.jfree.chart.axis.TickUnitSource;
+import org.jfree.chart.axis.TickUnits;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.XYPlot;
@@ -55,7 +62,15 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 		plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 
 		// domain axis
-		ValueAxis domainAxis = plot.getDomainAxis();
+		DateAxis domainAxis = (DateAxis)plot.getDomainAxis();
+		domainAxis.setVerticalTickLabels(true);
+		domainAxis.setTickUnit(new DateTickUnit(DateTickUnitType.HOUR, 1, new SimpleDateFormat("hh:mm:ss")));
+//		domainAxis.setAutoRange(true);
+//		domainAxis.setLowerMargin(0);
+//		domainAxis.setUpperMargin(0);
+//		domainAxis.setRange(0, 50);
+		domainAxis.setFixedAutoRange(60);
+		plot.setDomainAxis(domainAxis);
 
 		// legend
 		LegendTitle legend = new LegendTitle(plot);
@@ -68,8 +83,17 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 				RectangleAnchor.BOTTOM_RIGHT);
 		plot.addAnnotation(ta);
 
+		// usability
+		setMouseWheelEnabled(true);
+		
 		setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
 		setChart(chart);
+	}
+	
+	public void setZoom(double factor) {
+		setZoomInFactor(factor);
+		revalidate();
+		repaint();
 	}
 
 	@Override
@@ -81,11 +105,11 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 		    			datasets.addSeries(new YIntervalSeries(i));
 		    		}
 		    		YIntervalSeries dataset = datasets.getSeries(i);
-		    		dataset.add(iteration, values[i], 0, 0);
+		    		dataset.add(iteration, values[i], values[i], values[i]);
 		    	}
 		    	
 		    	// increase iteration
-		    	iteration++;
+		    	iteration += 1;
 		    	
 		    	// update chart
 		    	revalidate();
@@ -98,5 +122,11 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 	public void started() {}
 	@Override
 	public void stoped() {}
+
+	@Override
+	public void clear() {
+		datasets.removeAllSeries();
+		iteration = 0;
+	}
 
 }
