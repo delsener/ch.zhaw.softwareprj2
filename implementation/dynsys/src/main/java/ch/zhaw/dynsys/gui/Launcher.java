@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
 
 import ch.zhaw.dynsys.simulation.Simulation;
 
@@ -18,7 +18,7 @@ public class Launcher {
 		// setup listeners
 		RunningListener runningListener = new RunningListener();
 		ClearListener clearListener = new ClearListener();
-		Map<String, ActionListener> viewListener = new LinkedHashMap<>();
+		Map<String, ActionListener> viewListener = new LinkedHashMap<String, ActionListener>();
 		viewListener.put("50%", new ZoomListener(0.5));
 		viewListener.put("100%", new ZoomListener(1));
 		viewListener.put("150%", new ZoomListener(1.5));
@@ -42,7 +42,7 @@ public class Launcher {
 		}
 		
 		// setup simulation
-		Simulation simulation = new Simulation();
+		Simulation simulation = new Simulation(settingsPanel);
 		simulation.addSimulationListener(menubar);
 		simulation.addSimulationListener(chartPanel);
 		simulation.addSimulationListener(statusbar);
@@ -57,9 +57,33 @@ public class Launcher {
 		frame.add(settingsPanel, BorderLayout.EAST);
 		frame.add(statusbar, BorderLayout.SOUTH);
 
+		// setup example configuration
+		setupExampleSettings(settingsPanel);
+		
 		// show
 		frame.pack();
 		frame.setVisible(true);
+	}
+	
+	private static void setupExampleSettings(SettingsPanel settingsPanel) {
+		List<CulturePanel> culturePanels = settingsPanel.getCulturePanels();
+		
+		culturePanels.get(0).setVariableDescription("Temperatur (C°)"); // A
+		culturePanels.get(0).setVariableValue("20"); // A
+		
+		culturePanels.get(1).setVariableDescription("Hefemenge"); // B
+		culturePanels.get(1).setVariableValue("100"); // B
+		
+		settingsPanel.addCulturePanel("Zuckermenge", "650"); // C
+		
+		settingsPanel.addCulturePanel("Einfluss Zucker auf Wachstum", "math:sin(C)"); // D
+		settingsPanel.addCulturePanel("Einfluss Temperatur auf Wachstum", "math:cos(A)"); // E
+		
+		settingsPanel.addCulturePanel("Konstante für Wachstum Hefe", "30"); // F
+		settingsPanel.addCulturePanel("Population Hefe", "D * E * B * F"); // G
+		
+		settingsPanel.addCulturePanel("Konstante für Wachstum Zucker", "5"); // H
+		settingsPanel.addCulturePanel("Population Zucker", "G * H"); // I
 	}
 	
 	private static class RunningListener implements ActionListener {

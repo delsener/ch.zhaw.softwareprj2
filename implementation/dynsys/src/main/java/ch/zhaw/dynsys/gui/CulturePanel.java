@@ -18,9 +18,16 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 public class CulturePanel extends JPanel {
+	
 	private static final long serialVersionUID = 1L;
+	
+	private final String variable;
+	private JTextField nameField;
+	private JTextField valueField;
 
 	public CulturePanel(String variable) {
+		this.variable = variable;
+		
 		setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
 		setMaximumSize(new Dimension(300, 100));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -47,15 +54,15 @@ public class CulturePanel extends JPanel {
 		
 		JLabel nameLabel = new JLabel("Name: ", JLabel.TRAILING);
 	    items.add(nameLabel);
-	    JTextField nameField = new JTextField(10);
+	    nameField = new JTextField(10);
 	    nameLabel.setLabelFor(nameField);
 	    items.add(nameField);
 	    
 	    JLabel l = new JLabel("Function: ", JLabel.TRAILING);
 	    items.add(l);
-	    JTextField textField = new JTextField(10);
-	    l.setLabelFor(textField);
-	    items.add(textField);
+	    valueField = new JTextField(10);
+	    l.setLabelFor(valueField);
+	    items.add(valueField);
 		
 		SpringUtilities.makeCompactGrid(items,
                 3, 2, //rows, cols
@@ -65,6 +72,25 @@ public class CulturePanel extends JPanel {
 		add(items);
 	}
 	
+	public String getVariableName() {
+		return variable;
+	}
+
+	public void setVariableDescription(String description) {
+		nameField.setText(description);
+	}
+	
+	public String getVariableDescription() {
+		return nameField.getText();
+	}
+	
+	public void setVariableValue(String value) {
+		valueField.setText(value);
+	}
+	
+	public String getVariableValue() {
+		return valueField.getText();
+	}
 	
 	private class CloseListener implements ActionListener {
 		private Component component;

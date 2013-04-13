@@ -6,11 +6,21 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ch.zhaw.dynsys.el.utils.ExpressionUtil;
+import ch.zhaw.dynsys.gui.CulturePanel;
+import ch.zhaw.dynsys.gui.SettingsPanel;
+
 public class Simulation {
+	
+	private final SettingsPanel settingsPanel;
 	
 	private Timer timer = null;
 	private List<SimulationListener> simulationListeners = new ArrayList<SimulationListener>();
 
+	public Simulation(SettingsPanel settingsPanel) {
+		this.settingsPanel = settingsPanel;
+	}
+	
 	public void start() {
 		for (SimulationListener l : simulationListeners) {
 			l.started();
@@ -46,13 +56,10 @@ public class Simulation {
 
 		@Override
 		public void run() {
-			double[] datasets = new double[5];
+			// read culture panels
+			List<CulturePanel> culturePanels = settingsPanel.getCulturePanels();
+			double[] datasets = ExpressionUtil.evaluateExpressions(culturePanels);
 			
-			Random random = new Random();
-			for (int i=0; i<datasets.length; i++) {
-				datasets[i] = random.nextDouble();
-			}
-
 			for (SimulationListener l : simulationListeners) {
 				l.evolved(datasets);
 			}
