@@ -1,24 +1,20 @@
 package ch.zhaw.dynsys.simulation;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ch.zhaw.dynsys.el.utils.ExpressionUtil;
-import ch.zhaw.dynsys.gui.CulturePanel;
-import ch.zhaw.dynsys.gui.SettingsPanel;
 
-public class Simulation {
-	
-	private final SettingsPanel settingsPanel;
-	
+public class Simulation implements CultureListener {	
+	private Map<String, Culture> cultures = new LinkedHashMap<String, Culture>();
 	private Timer timer = null;
 	private List<SimulationListener> simulationListeners = new ArrayList<SimulationListener>();
 
-	public Simulation(SettingsPanel settingsPanel) {
-		this.settingsPanel = settingsPanel;
+	public Simulation() {
 	}
 	
 	public void start() {
@@ -56,12 +52,12 @@ public class Simulation {
 
 		@Override
 		public void run() {
-			// read culture panels
-			List<CulturePanel> culturePanels = settingsPanel.getCulturePanels();
-			double[] datasets = ExpressionUtil.evaluateExpressions(culturePanels);
-			
-			for (SimulationListener l : simulationListeners) {
-				l.evolved(datasets);
+			synchronized (cultures) {
+				ExpressionUtil.evaluateExpressions(cultures.values());
+				
+				for (SimulationListener l : simulationListeners) {
+					l.evolved(cultures.values());
+				}
 			}
 		}
 	}
@@ -70,6 +66,20 @@ public class Simulation {
 	public void clear() {
 		for (SimulationListener l : simulationListeners) {
 			l.clear();
+		}
+	}
+	
+	@Override
+	public void changed(Culture culture) {
+		synchronized (cultures) {
+			cultures.put(culture.getVariable(), culture);
+		}
+	}
+
+	@Override
+	public void removed(Culture culture) {
+		synchronized (cultures) {
+			cultures.remove(culture.getVariable());
 		}
 	}
 }

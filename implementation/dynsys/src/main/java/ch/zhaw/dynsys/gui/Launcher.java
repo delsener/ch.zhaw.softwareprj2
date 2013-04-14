@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import ch.zhaw.dynsys.simulation.Culture;
 import ch.zhaw.dynsys.simulation.Simulation;
 
 public class Launcher {
@@ -42,12 +43,13 @@ public class Launcher {
 		}
 		
 		// setup simulation
-		Simulation simulation = new Simulation(settingsPanel);
+		Simulation simulation = new Simulation();
 		simulation.addSimulationListener(menubar);
 		simulation.addSimulationListener(chartPanel);
 		simulation.addSimulationListener(statusbar);
 		runningListener.setSimulation(simulation);
 		clearListener.setSimulation(simulation);
+		settingsPanel.addCultureListener(simulation);
 		
 		// add simulation to menubar
 
@@ -66,24 +68,17 @@ public class Launcher {
 	}
 	
 	private static void setupExampleSettings(SettingsPanel settingsPanel) {
-		List<CulturePanel> culturePanels = settingsPanel.getCulturePanels();
 		
-		culturePanels.get(0).setVariableDescription("Temperatur (C°)"); // A
-		culturePanels.get(0).setVariableValue("20"); // A
-		
-		culturePanels.get(1).setVariableDescription("Hefemenge"); // B
-		culturePanels.get(1).setVariableValue("100"); // B
-		
-		settingsPanel.addCulturePanel("Zuckermenge", "650"); // C
-		
-		settingsPanel.addCulturePanel("Einfluss Zucker auf Wachstum", "math:sin(C)"); // D
-		settingsPanel.addCulturePanel("Einfluss Temperatur auf Wachstum", "math:cos(A)"); // E
-		
-		settingsPanel.addCulturePanel("Konstante für Wachstum Hefe", "30"); // F
-		settingsPanel.addCulturePanel("Population Hefe", "D * E * B * F"); // G
-		
-		settingsPanel.addCulturePanel("Konstante für Wachstum Zucker", "5"); // H
-		settingsPanel.addCulturePanel("Population Zucker", "G * H"); // I
+		settingsPanel.addCulturePanel(new Culture("Temperatur (C°)", "A", "20", 0));
+		settingsPanel.addCulturePanel(new Culture("Hefemenge", "B", "100", 0));
+		settingsPanel.addCulturePanel(new Culture("Hefemenge", "B", "100", 0));
+		settingsPanel.addCulturePanel(new Culture("Zuckermenge", "C", "650", 0));		
+		settingsPanel.addCulturePanel(new Culture("Einfluss Zucker auf Wachstum", "D", "math:sin(C)", 0)); // D
+		settingsPanel.addCulturePanel(new Culture("Einfluss Temperatur auf Wachstum", "E", "math:cos(A)", 0)); // E
+		settingsPanel.addCulturePanel(new Culture("Konstante für Wachstum Hefe", "F",  "30", 0)); // F
+		settingsPanel.addCulturePanel(new Culture("Population Hefe", "G", "D * E * B * F", 0)); // G
+		settingsPanel.addCulturePanel(new Culture("Konstante für Wachstum Zucker", "H", "5", 0)); // H
+		settingsPanel.addCulturePanel(new Culture("Population Zucker", "I", "G * H", 0)); // I
 	}
 	
 	private static class RunningListener implements ActionListener {

@@ -2,6 +2,7 @@ package ch.zhaw.dynsys.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.swing.JMenu;
@@ -9,6 +10,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import ch.zhaw.dynsys.simulation.Culture;
 import ch.zhaw.dynsys.simulation.SimulationListener;
 
 public class Menubar extends JMenuBar implements SimulationListener {
@@ -65,7 +67,7 @@ public class Menubar extends JMenuBar implements SimulationListener {
 	}
 
 	@Override
-	public void evolved(double[] values) {}
+	public void evolved(Collection<Culture> cultures) {}
 	
 	
 	@Override

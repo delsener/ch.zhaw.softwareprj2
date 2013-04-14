@@ -1,6 +1,7 @@
 package ch.zhaw.dynsys.gui;
 
 import java.awt.Dimension;
+import java.util.Collection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -8,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+import ch.zhaw.dynsys.simulation.Culture;
 import ch.zhaw.dynsys.simulation.SimulationListener;
 
 public class Statusbar extends JPanel implements SimulationListener {
@@ -37,7 +39,7 @@ public class Statusbar extends JPanel implements SimulationListener {
 	}
 
 	@Override
-	public void evolved(double[] values) {}
+	public void evolved(Collection<Culture> cultures) {}
 
 	@Override
 	public void clear() {}

@@ -1,17 +1,26 @@
 package ch.zhaw.dynsys.gui;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import ch.zhaw.dynsys.simulation.Culture;
+import ch.zhaw.dynsys.simulation.CultureListener;
 
 public class SettingsPanel extends JScrollPane {
 	
@@ -20,7 +29,7 @@ public class SettingsPanel extends JScrollPane {
 	private JPanel parent;
 	
 	private List<CulturePanel> culturePanels = new LinkedList<CulturePanel>();
-	private char currentCultureVariable = '@';
+	private List<CultureListener> cultureListeners = new ArrayList<CultureListener>();
 
 	public SettingsPanel() {
 		parent = new JPanel();
@@ -43,39 +52,71 @@ public class SettingsPanel extends JScrollPane {
 		
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    
-	    addCulturePanel();
-	    addCulturePanel();
 	}
 	
 	public List<CulturePanel> getCulturePanels() {
 		return culturePanels;
 	}
 
-	public void addCulturePanel() {
-		addCulturePanel(null, null);
-	}
-	
-	public void addCulturePanel(String initialName, String initialValue) {
-		if (currentCultureVariable == 'Z') {
-			return;
-		}
-		
-		CulturePanel culturePanel = new CulturePanel(String.valueOf(++currentCultureVariable));
-		culturePanel.setVariableDescription(initialName);
-		culturePanel.setVariableValue(initialValue);
+	public void addCulturePanel(Culture culture) {
+		CulturePanel culturePanel = new CulturePanel(culture, new CultureChangeListener(), new CloseListener());
 		
 		culturePanels.add(culturePanel);
 		parent.add(culturePanel, parent.getComponentCount() - 1);
 		parent.revalidate();
 	}
 	
+	
 	private class AddListener implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			addCulturePanel();
+			addCulturePanel(null);
 		}
+	}
+	
+	
+	public void addCultureListener(CultureListener listener) {
+		cultureListeners.add(listener);
+	}
+	
+	
+	public void removeCultureListener(CultureListener listener) {
+		cultureListeners.remove(listener);
+	}
+	
+	private class CultureChangeListener implements FocusListener {		
+		@Override
+		public void focusGained(FocusEvent e) {}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			JTextField field = (JTextField)e.getSource();
+			CulturePanel culturePanel = (CulturePanel)field.getParent().getParent();
+			
+			for (CultureListener listener : cultureListeners) {
+				listener.changed(culturePanel.getCulture());
+			}
+		}
+	}
+	
+	
+	private class CloseListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JComponent button = (JComponent)e.getSource();
+			CulturePanel culturePanel = (CulturePanel)button.getParent();
+			Container parent = culturePanel.getParent();			
+			parent.remove(culturePanel);
+			
+			parent.revalidate();
+			parent.repaint();
+			
+			for (CultureListener listener : cultureListeners) {
+				listener.removed(culturePanel.getCulture());
+			}
+		}
+		
 	}
 
 }

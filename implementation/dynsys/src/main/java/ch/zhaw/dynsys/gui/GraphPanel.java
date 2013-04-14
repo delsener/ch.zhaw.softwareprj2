@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
@@ -26,6 +27,7 @@ import org.jfree.data.xy.YIntervalSeriesCollection;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.RectangleEdge;
 
+import ch.zhaw.dynsys.simulation.Culture;
 import ch.zhaw.dynsys.simulation.SimulationListener;
 
 public class GraphPanel extends ChartPanel implements SimulationListener {
@@ -92,15 +94,19 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 	}
 
 	@Override
-	public void evolved(final double[] values) {
+	public void evolved(final Collection<Culture> cultures) {
 		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {		    	
-		    	for (int i = 0; i < values.length; i++) {
+		    public void run() {
+		    	int i = 0;
+		    	for (Culture culture : cultures) {
 		    		if (i >= datasets.getSeriesCount()) {
-		    			datasets.addSeries(new YIntervalSeries(i));
+		    			datasets.addSeries(new YIntervalSeries(culture.getName()));
 		    		}
 		    		YIntervalSeries dataset = datasets.getSeries(i);
-		    		dataset.add(iteration, values[i], values[i], values[i]);
+		    		dataset.setKey(culture.getName());
+		    		dataset.add(iteration, culture.getQuantity(), culture.getQuantity(), culture.getQuantity());
+		    		
+		    		i++;
 		    	}
 		    	
 		    	// increase iteration

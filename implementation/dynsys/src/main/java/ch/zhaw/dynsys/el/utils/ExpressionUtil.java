@@ -1,7 +1,7 @@
 package ch.zhaw.dynsys.el.utils;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.jexl2.JexlContext;
@@ -10,6 +10,7 @@ import org.apache.commons.jexl2.MapContext;
 import org.apache.commons.jexl2.Script;
 
 import ch.zhaw.dynsys.gui.CulturePanel;
+import ch.zhaw.dynsys.simulation.Culture;
 
 /**
  * This utility classes provides functionality to evaluate expressions defined in {@link CulturePanel}'s using the
@@ -36,19 +37,23 @@ public class ExpressionUtil {
 	}
 
 	
-	public static double[] evaluateExpressions(List<CulturePanel> culturePanels) {
+	public static void evaluateExpressions(Collection<Culture> cultures) {
+		if (cultures.size() == 0) {
+			return;
+		}
+		
 		// put all expressions in one string
 		StringBuilder expressionString = new StringBuilder();
 		expressionString.append("{\n");
-		for (CulturePanel culturePanel : culturePanels) {
-			expressionString.append("var " + culturePanel.getVariableName() + " = " + culturePanel.getVariableValue() + "\n");
+		for (Culture culture : cultures) {
+			expressionString.append("var " + culture.getVariable() + " = " + culture.getExpression() + "\n");
 		}
 		expressionString.append("}\n");
 		
 		// to get all values as result, put them in a map an return it 
 		expressionString.append("return [");
-		for (CulturePanel culturePanel : culturePanels) {
-			expressionString.append(culturePanel.getVariableName() + ", ");
+		for (Culture culture : cultures) {
+			expressionString.append(culture.getVariable() + ", ");
 		}
 		expressionString.delete(expressionString.length() -2, expressionString.length());
 		expressionString.append("];");
@@ -59,11 +64,10 @@ public class ExpressionUtil {
 		JexlContext context = new MapContext();
 		
 		Number[] results = (Number[]) script.execute(context);
-		double[] resultsCasted = new double[results.length];
-		for (int i = 0; i < results.length; i++) {
-			resultsCasted[i] = results[i].doubleValue();
+		int i = 0;
+		for (Culture culture : cultures) {
+			culture.setQuantity(results[i].doubleValue());
+			i++;
 		}
-		
-		return resultsCasted;
 	}
 }
