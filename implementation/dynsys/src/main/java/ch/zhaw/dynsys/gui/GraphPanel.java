@@ -104,7 +104,7 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 		    		}
 		    		YIntervalSeries dataset = datasets.getSeries(i);
 		    		dataset.setKey(culture.getName());
-		    		dataset.add(iteration, culture.getQuantity(), culture.getQuantity(), culture.getQuantity());
+		    		dataset.add(iteration, culture.getPopulation(), culture.getPopulation(), culture.getPopulation());
 		    		
 		    		i++;
 		    	}

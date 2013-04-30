@@ -46,14 +46,15 @@ public class ExpressionUtil {
 		StringBuilder expressionString = new StringBuilder();
 		expressionString.append("{\n");
 		for (Culture culture : cultures) {
-			expressionString.append("var " + culture.getVariable() + " = " + culture.getExpression() + "\n");
+			expressionString.append("var " + culture.getVariable() + " = " + culture.getPopulation() + "\n");
+			expressionString.append("var " + culture.getVariable() + "_diff = " + culture.getGrowRate() + "\n");
 		}
 		expressionString.append("}\n");
 		
 		// to get all values as result, put them in a map an return it 
 		expressionString.append("return [");
 		for (Culture culture : cultures) {
-			expressionString.append(culture.getVariable() + ", ");
+			expressionString.append(culture.getExpression() + ", ");
 		}
 		expressionString.delete(expressionString.length() -2, expressionString.length());
 		expressionString.append("];");
@@ -66,7 +67,8 @@ public class ExpressionUtil {
 		Number[] results = (Number[]) script.execute(context);
 		int i = 0;
 		for (Culture culture : cultures) {
-			culture.setQuantity(results[i].doubleValue());
+			culture.setGrowRate(results[i].doubleValue());
+			culture.setPopulation(culture.getPopulation() + culture.getGrowRate());
 			i++;
 		}
 	}

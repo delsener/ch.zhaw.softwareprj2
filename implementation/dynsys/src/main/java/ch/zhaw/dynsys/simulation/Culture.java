@@ -5,7 +5,8 @@ public class Culture {
 	private String name;
 	private String variable;
 	private String expression;
-	private double quantity;
+	private double population;
+	private transient double growRate = 0; 
 	
 	
 	public Culture() {
@@ -13,11 +14,12 @@ public class Culture {
 	}
 
 
-	public Culture(String name, String variable, String expression, double quantity) {
+	public Culture(String name, String variable, String expression, double population) {
 		super();
 		this.name = name;
 		this.variable = variable;
 		this.expression = expression;
+		this.population = population;
 	}
 
 
@@ -51,13 +53,23 @@ public class Culture {
 	}
 
 
-	public double getQuantity() {
-		return quantity;
+	public double getPopulation() {
+		return population;
 	}
 
 
-	public void setQuantity(double quantity) {
-		this.quantity = quantity;
+	public void setPopulation(double population) {
+		this.population = population;
+	}
+
+
+	public double getGrowRate() {
+		return growRate;
+	}
+
+
+	public void setGrowRate(double growRate) {
+		this.growRate = growRate;
 	}
 	
 	

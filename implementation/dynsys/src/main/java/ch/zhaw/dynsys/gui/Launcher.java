@@ -68,17 +68,9 @@ public class Launcher {
 	}
 	
 	private static void setupExampleSettings(SettingsPanel settingsPanel) {
-		
-		settingsPanel.addCulturePanel(new Culture("Temperatur (C°)", "A", "20", 0));
-		settingsPanel.addCulturePanel(new Culture("Hefemenge", "B", "100", 0));
-		settingsPanel.addCulturePanel(new Culture("Hefemenge", "B", "100", 0));
-		settingsPanel.addCulturePanel(new Culture("Zuckermenge", "C", "650", 0));		
-		settingsPanel.addCulturePanel(new Culture("Einfluss Zucker auf Wachstum", "D", "math:sin(C)", 0)); // D
-		settingsPanel.addCulturePanel(new Culture("Einfluss Temperatur auf Wachstum", "E", "math:cos(A)", 0)); // E
-		settingsPanel.addCulturePanel(new Culture("Konstante für Wachstum Hefe", "F",  "30", 0)); // F
-		settingsPanel.addCulturePanel(new Culture("Population Hefe", "G", "D * E * B * F", 0)); // G
-		settingsPanel.addCulturePanel(new Culture("Konstante für Wachstum Zucker", "H", "5", 0)); // H
-		settingsPanel.addCulturePanel(new Culture("Population Zucker", "I", "G * H", 0)); // I
+		settingsPanel.addCulturePanel(new Culture("Temperatur (C°)", "t", "8", -20));
+		settingsPanel.addCulturePanel(new Culture("Hefe", "H", "math:max(-H, 0.0001 * H * Z * (20 - math:abs(10 - t)) )", 100));
+		settingsPanel.addCulturePanel(new Culture("Zucker", "Z", "math:min(0, -math:min(Z, H_diff))", 650));
 	}
 	
 	private static class RunningListener implements ActionListener {

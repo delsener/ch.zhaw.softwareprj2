@@ -32,6 +32,7 @@ public class CulturePanel extends JPanel implements FocusListener {
 	private Culture culture = new Culture();
 	private JTextField nameField;
 	private JTextField expressionField;
+	private JTextField quantityField;
 	
 	private FocusListener focusListener;
 
@@ -39,7 +40,7 @@ public class CulturePanel extends JPanel implements FocusListener {
 		this.focusListener = focusListener;
 		
 		setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
-		setMaximumSize(new Dimension(300, 80));
+		setMaximumSize(new Dimension(300, 100));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		setAlignmentY(Component.TOP_ALIGNMENT);
 		
@@ -66,35 +67,52 @@ public class CulturePanel extends JPanel implements FocusListener {
 	    expressionField.addFocusListener(this);
 	    items.add(expressionField);
 	    
+	    // quantity
+	    quantityField = new JTextField(50);
+	    quantityField.addFocusListener(this);
+	    items.add(quantityField);
+	    
 	    add(items);
 	    
 	    if (culture != null) {
 	    	this.culture = culture;
 	    	nameField.setText(culture.getName());
 	    	expressionField.setText(culture.getVariable() + " = " + culture.getExpression());
+	    	quantityField.setText(String.valueOf(culture.getPopulation()));
 	    	FocusEvent e = new FocusEvent(nameField, 0);
 	    	focusListener.focusLost(e);
 	    } else {
 	    	this.culture = new Culture();
-	    	setDefaults();
+	    	resetNameField();
+	    	resetExpressionField();
+	    	resetQuantityField();
 	    }
 		
 		SpringUtilities.makeCompactGrid(items,
-                2, 1, //rows, cols
+                3, 1, //rows, cols
                 6, 6,        //initX, initY
                 6, 6);
 	}
 	
-	private void setDefaults() {
+	private void resetNameField() {
 		// name label
-	    nameField.setText("Name of culture");
+	    nameField.setText("Culture");
 	    nameField.setFont(FIELD_EMPTY_FONT);
 	    nameField.setForeground(Color.GRAY);
+	}
 	    
+	private void resetExpressionField() {
 	    // expression
 	    expressionField.setText("y = cos(t)");
 	    expressionField.setFont(FIELD_EMPTY_FONT);
 	    expressionField.setForeground(Color.GRAY);
+	}
+	    
+	private void resetQuantityField() {
+	    // quantity
+	    quantityField.setText("120");
+	    quantityField.setFont(FIELD_EMPTY_FONT);
+	    quantityField.setForeground(Color.GRAY);
 	}
 
 	public Culture getCulture() {
@@ -115,6 +133,12 @@ public class CulturePanel extends JPanel implements FocusListener {
 				expressionField.setFont(FIELD_FILLED_FONT);
 				expressionField.setForeground(Color.BLACK);
 			}
+		} else if (quantityField == e.getSource()) {
+			if (StringUtils.isEmpty(culture.getVariable()) || StringUtils.isEmpty(culture.getExpression())) {
+				quantityField.setText("");
+				quantityField.setFont(FIELD_FILLED_FONT);
+				quantityField.setForeground(Color.BLACK);
+			}
 		}
 		
 		focusListener.focusGained(e);
@@ -124,18 +148,13 @@ public class CulturePanel extends JPanel implements FocusListener {
 	public void focusLost(FocusEvent e) {
 		if (nameField == e.getSource()) {
 			if (StringUtils.isEmpty(nameField.getText())) {
-				// name label
-			    nameField.setText("Name of culture");
-			    nameField.setFont(FIELD_EMPTY_FONT);
-			    nameField.setForeground(Color.GRAY);
+				resetNameField();
 			} else {
 				culture.setName(nameField.getText());
 			}
 		} else if (expressionField == e.getSource()) {
 			if (StringUtils.isEmpty(expressionField.getText())) {
-				expressionField.setText("");
-				expressionField.setFont(FIELD_FILLED_FONT);
-				expressionField.setForeground(Color.BLACK);
+				resetExpressionField();
 			} else {
 				Pattern pattern = Pattern.compile("([A-Za-z][A-Za-z0-9]*) *= *(.+$)");
 				Matcher matcher = pattern.matcher(expressionField.getText());
@@ -146,6 +165,19 @@ public class CulturePanel extends JPanel implements FocusListener {
 					expressionField.setBackground(Color.WHITE);
 				} else {
 					expressionField.setBackground(Color.RED);
+				}
+			}
+		} else if (quantityField == e.getSource()) {
+			if (StringUtils.isEmpty(quantityField.getText())) {
+				resetQuantityField();
+			} else {
+				try {
+					double population = Double.parseDouble(quantityField.getText());
+					
+					culture.setPopulation(population);
+					quantityField.setBackground(Color.WHITE);
+				} catch (NumberFormatException e1) {
+					quantityField.setBackground(Color.RED);
 				}
 			}
 		}
