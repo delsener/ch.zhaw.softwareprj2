@@ -1,5 +1,6 @@
 package ch.zhaw.dynsys.el.utils;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.MapContext;
 import org.apache.commons.jexl2.Script;
+import org.apache.commons.lang3.StringUtils;
 
 import ch.zhaw.dynsys.gui.CulturePanel;
 import ch.zhaw.dynsys.simulation.Culture;
@@ -54,7 +56,7 @@ public class ExpressionUtil {
 		// to get all values as result, put them in a map an return it 
 		expressionString.append("return [");
 		for (Culture culture : cultures) {
-			expressionString.append(culture.getExpression() + ", ");
+			expressionString.append("new(\"java.math.BigDecimal\"," + culture.getExpression() + "), ");
 		}
 		expressionString.delete(expressionString.length() -2, expressionString.length());
 		expressionString.append("];");
@@ -64,7 +66,7 @@ public class ExpressionUtil {
 		Script script = EL_ENGINE.createScript(expressionString.toString());
 		JexlContext context = new MapContext();
 		
-		Number[] results = (Number[]) script.execute(context);
+		BigDecimal[] results = (BigDecimal[]) script.execute(context);
 		int i = 0;
 		for (Culture culture : cultures) {
 			culture.setGrowRate(results[i].doubleValue());
