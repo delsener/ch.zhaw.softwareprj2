@@ -6,7 +6,6 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
-import ch.zhaw.dynsys.gui.MessageHandler;
 import ch.zhaw.dynsys.gui.SettingsPanel;
 import ch.zhaw.dynsys.simulation.configs.SystemConfigurations;
 
@@ -44,8 +43,6 @@ public class LoadFromPresetsListener implements ActionListener {
 
 		settingsPanel.resetSettingsPanel();
 		settingsPanel.addCultures(Arrays.asList(SystemConfigurations.getByName(result).getCultures()));
-		MessageHandler
-				.displayInfoMessage("Successfully loaded preset cultures '" + result + "'");
 	}
 
 }

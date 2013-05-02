@@ -55,7 +55,6 @@ public class LoadFromFileListener implements ActionListener {
 		
 		settingsPanel.resetSettingsPanel();
 		settingsPanel.addCultures(cultures);
-		MessageHandler.displayInfoMessage("Successfully loaded cultures from selected file!");
 	}
 
 }
