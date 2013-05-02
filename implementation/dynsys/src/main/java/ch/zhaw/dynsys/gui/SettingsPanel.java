@@ -1,5 +1,6 @@
 package ch.zhaw.dynsys.gui;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -57,6 +58,31 @@ public class SettingsPanel extends JScrollPane {
 	public List<CulturePanel> getCulturePanels() {
 		return culturePanels;
 	}
+	
+	public List<Culture> getCultures() {
+		if (culturePanels == null) {
+			return new ArrayList<Culture>(0);
+		}
+		List<Culture> cultures = new ArrayList<Culture>();
+		for (CulturePanel culturePanel : culturePanels) {
+			if (culturePanel.getCulture() == null) {
+				continue;
+			}
+			
+			cultures.add(culturePanel.getCulture());
+		}
+		return cultures;
+	}
+	
+	public void addCultures(List<Culture> cultures) {
+		if (cultures == null) {
+			return;
+		}
+		
+		for (Culture culture : cultures) {
+			addCulturePanel(culture);
+		}
+	}
 
 	public void addCulturePanel(Culture culture) {
 		CulturePanel culturePanel = new CulturePanel(culture, new CultureChangeListener(), new CloseListener());
@@ -64,7 +90,35 @@ public class SettingsPanel extends JScrollPane {
 		culturePanels.add(culturePanel);
 		parent.add(culturePanel, parent.getComponentCount() - 1);
 		parent.revalidate();
+		
+		if (culture == null) {
+			return;
+		}
+		
+		for (CultureListener listener : cultureListeners) {
+			listener.changed(culture);
+		}
 	}
+	
+
+	public void resetSettingsPanel() {
+		for (Culture culture : getCultures()) {
+			removeCulture(culture);
+		}
+		
+		Component[] components = parent.getComponents();
+		for (Component component : components) {
+			parent.remove(component);
+		}
+	}
+	
+	public void removeCulture(Culture culture) {
+		culturePanels.remove(getCultures().indexOf(culture));
+		for (CultureListener listener : cultureListeners) {
+			listener.removed(culture);
+		}
+	}
+	
 	
 	
 	private class AddListener implements ActionListener {
@@ -112,9 +166,7 @@ public class SettingsPanel extends JScrollPane {
 			parent.revalidate();
 			parent.repaint();
 			
-			for (CultureListener listener : cultureListeners) {
-				listener.removed(culturePanel.getCulture());
-			}
+			removeCulture(culturePanel.getCulture());
 		}
 		
 	}

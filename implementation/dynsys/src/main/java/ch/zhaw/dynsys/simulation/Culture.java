@@ -1,7 +1,12 @@
 package ch.zhaw.dynsys.simulation;
 
-public class Culture {
+import java.io.Serializable;
 
+public class Culture implements Serializable {
+
+	/** Generated <code>serialVersionUID</code>. */
+	private static final long serialVersionUID = -3694941572400029800L;
+	
 	private String name;
 	private String variable;
 	private String expression;
