@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import ch.zhaw.dynsys.persistence.LoadFromFileListener;
 import ch.zhaw.dynsys.persistence.LoadFromPresetsListener;
 import ch.zhaw.dynsys.persistence.SaveListener;
-import ch.zhaw.dynsys.simulation.Culture;
 import ch.zhaw.dynsys.simulation.Simulation;
 
 public class Launcher {
@@ -32,10 +31,8 @@ public class Launcher {
 		RunningListener runningListener = new RunningListener();
 		ClearListener clearListener = new ClearListener();
 		Map<String, ActionListener> viewListener = new LinkedHashMap<String, ActionListener>();
-		viewListener.put("50%", new ZoomListener(0.5));
-		viewListener.put("100%", new ZoomListener(1));
-		viewListener.put("150%", new ZoomListener(1.5));
-		viewListener.put("200%", new ZoomListener(2));
+		viewListener.put("View all", new ViewListener(true));
+		viewListener.put("View lastest", new ViewListener(false));
 		SaveListener saveListener = new SaveListener(settingsPanel);
 		LoadFromFileListener loadFileListener = new LoadFromFileListener(
 				settingsPanel);
@@ -48,8 +45,12 @@ public class Launcher {
 
 		// setup listener
 		for (Map.Entry<String, ActionListener> entry : viewListener.entrySet()) {
-			ZoomListener listener = (ZoomListener) entry.getValue();
-			listener.setGraphPanel(chartPanel);
+			ActionListener actionListener = entry.getValue();
+			
+			if (actionListener instanceof ViewListener) {
+				ViewListener listener = (ViewListener)actionListener;
+				listener.setGraphPanel(chartPanel);
+			}
 		}
 
 		// setup simulation
@@ -62,7 +63,6 @@ public class Launcher {
 		settingsPanel.addCultureListener(simulation);
 
 		// add simulation to menubar
-
 		// build gui
 		frame.setJMenuBar(menubar);
 		frame.add(chartPanel, BorderLayout.CENTER);
@@ -109,18 +109,21 @@ public class Launcher {
 			this.simulation = simulation;
 		}
 	}
-
-	private static class ZoomListener implements ActionListener {
+	
+	
+	private static class ViewListener implements ActionListener {
 		private GraphPanel graphPanel = null;
-		private double factor;
+		private boolean viewAll;
 
-		public ZoomListener(double factor) {
-			this.factor = factor;
+
+
+		public ViewListener(boolean viewAll) {
+			this.viewAll = viewAll;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			graphPanel.setZoom(2);
+			graphPanel.setViewAll(viewAll);
 		}
 
 		public void setGraphPanel(GraphPanel graphPanel) {

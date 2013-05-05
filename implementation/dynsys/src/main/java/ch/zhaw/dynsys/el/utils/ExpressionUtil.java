@@ -37,7 +37,7 @@ public class ExpressionUtil {
 	}
 
 	
-	public static void evaluateExpressions(Collection<Culture> cultures) {
+	public static void evaluateExpressions(Collection<Culture> cultures, long time) {
 		if (cultures.size() == 0) {
 			return;
 		}
@@ -66,7 +66,11 @@ public class ExpressionUtil {
 		double[] results = (double[]) script.execute(context);
 		int i = 0;
 		for (Culture culture : cultures) {
-			culture.setGrowRate(results[i]);
+			culture.setGrowRate(results[i] * (time/1000.0d));
+			if (culture.isExcintion() && culture.getGrowRate() < -culture.getPopulation()) {
+				culture.setGrowRate(-culture.getPopulation());
+			}
+
 			culture.setPopulation(culture.getPopulation() + culture.getGrowRate());
 			i++;
 		}

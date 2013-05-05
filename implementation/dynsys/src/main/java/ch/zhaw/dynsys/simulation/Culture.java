@@ -11,6 +11,7 @@ public class Culture implements Serializable {
 	private String variable;
 	private String expression;
 	private double population;
+	private boolean excintion;
 	private transient double growRate = 0; 
 	
 	
@@ -19,12 +20,13 @@ public class Culture implements Serializable {
 	}
 
 
-	public Culture(String name, String variable, String expression, double population) {
+	public Culture(String name, String variable, String expression, double population, boolean excintion) {
 		super();
 		this.name = name;
 		this.variable = variable;
 		this.expression = expression;
 		this.population = population;
+		this.excintion = excintion;
 	}
 
 
@@ -75,6 +77,16 @@ public class Culture implements Serializable {
 
 	public void setGrowRate(double growRate) {
 		this.growRate = growRate;
+	}
+
+
+	public boolean isExcintion() {
+		return excintion;
+	}
+
+
+	public void setExcintion(boolean excintion) {
+		this.excintion = excintion;
 	}
 	
 	

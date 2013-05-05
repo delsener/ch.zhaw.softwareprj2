@@ -86,7 +86,7 @@ public class Menubar extends JMenuBar implements SimulationListener {
 	}
 
 	@Override
-	public void evolved(Collection<Culture> cultures) {
+	public void evolved(Collection<Culture> cultures, long time) {
 	}
 
 	@Override

@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
@@ -22,6 +24,10 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.Second;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.YIntervalSeries;
 import org.jfree.data.xy.YIntervalSeriesCollection;
 import org.jfree.ui.RectangleAnchor;
@@ -31,12 +37,14 @@ import ch.zhaw.dynsys.simulation.Culture;
 import ch.zhaw.dynsys.simulation.SimulationListener;
 
 public class GraphPanel extends ChartPanel implements SimulationListener {
+	private static final int LASTEST_TIME_FRAME = 60000;
+
 	private static final long serialVersionUID = 1L;
 	
-	private double iteration = 0;
-	private YIntervalSeriesCollection datasets = new YIntervalSeriesCollection();
+	private TimeSeriesCollection datasets = new TimeSeriesCollection();
 	private JFreeChart chart;
 	private XYPlot plot;
+	private DateAxis domainAxis;
 
 	public GraphPanel() {
 		super(null);
@@ -59,14 +67,11 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 		plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 
 		// domain axis
-		DateAxis domainAxis = (DateAxis)plot.getDomainAxis();
-		domainAxis.setVerticalTickLabels(true);
-		domainAxis.setTickUnit(new DateTickUnit(DateTickUnitType.HOUR, 1, new SimpleDateFormat("hh:mm:ss")));
-//		domainAxis.setAutoRange(true);
-//		domainAxis.setLowerMargin(0);
-//		domainAxis.setUpperMargin(0);
-//		domainAxis.setRange(0, 50);
-		domainAxis.setFixedAutoRange(60);
+		domainAxis = (DateAxis)plot.getDomainAxis();
+		domainAxis.setLabel("Time");
+		//domainAxis.setVerticalTickLabels(true);
+		domainAxis.setAutoTickUnitSelection(true);
+		domainAxis.setFixedAutoRange(LASTEST_TIME_FRAME);
 		plot.setDomainAxis(domainAxis);
 
 		// legend
@@ -76,8 +81,8 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 		legend.setBackgroundPaint(Color.white);
 		legend.setFrame(new BlockBorder(Color.gray));
 		legend.setPosition(RectangleEdge.LEFT);
-		XYTitleAnnotation ta = new XYTitleAnnotation(0.98, 0.02, legend,
-				RectangleAnchor.BOTTOM_RIGHT);
+		XYTitleAnnotation ta = new XYTitleAnnotation(0.01, 0.02, legend,
+				RectangleAnchor.BOTTOM_LEFT);
 		plot.addAnnotation(ta);
 
 		// usability
@@ -87,30 +92,31 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 		setChart(chart);
 	}
 	
-	public void setZoom(double factor) {
-		setZoomInFactor(factor);
-		revalidate();
-		repaint();
+	public void setViewAll(boolean flag) {
+		if (flag) {
+			domainAxis.setFixedAutoRange(0);
+		} else {
+			domainAxis.setFixedAutoRange(LASTEST_TIME_FRAME);
+		}
 	}
 
 	@Override
-	public void evolved(final Collection<Culture> cultures) {
+	public void evolved(final Collection<Culture> cultures, final long time) {
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
 		    	int i = 0;
 		    	for (Culture culture : cultures) {
 		    		if (i >= datasets.getSeriesCount()) {
-		    			datasets.addSeries(new YIntervalSeries(culture.getName()));
+		    			datasets.addSeries(new TimeSeries(culture.getName()));
 		    		}
-		    		YIntervalSeries dataset = datasets.getSeries(i);
+		    		TimeSeries dataset = datasets.getSeries(i);
 		    		dataset.setKey(culture.getName());
-		    		dataset.add(iteration, culture.getPopulation(), culture.getPopulation(), culture.getPopulation());
+		    		Calendar calendar = Calendar.getInstance();
+		    		calendar.add(Calendar.MILLISECOND, (int)time);		    		
+		    		dataset.add(new Millisecond(calendar.getTime()), culture.getPopulation());
 		    		
 		    		i++;
 		    	}
-		    	
-		    	// increase iteration
-		    	iteration += 1;
 		    	
 		    	// update chart
 		    	revalidate();
@@ -127,7 +133,6 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 	@Override
 	public void clear() {
 		datasets.removeAllSeries();
-		iteration = 0;
 	}
 
 }

@@ -29,6 +29,10 @@ public class MathFunctionProvider {
         return Math.min(a, b);
     }
 	
+	public double sgn(double x) {
+		return Math.signum(x);
+	}
+	
 	public double rand() {
         return random.nextDouble();
     }

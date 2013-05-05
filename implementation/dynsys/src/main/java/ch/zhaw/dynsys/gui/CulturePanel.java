@@ -120,24 +120,12 @@ public class CulturePanel extends JPanel implements FocusListener {
 	}
 
 	@Override
-	public void focusGained(FocusEvent e) {
-		if (nameField == e.getSource()) {
-			if (StringUtils.isEmpty(culture.getName())) {
-				nameField.setText("");
-				nameField.setFont(FIELD_FILLED_FONT);
-			    nameField.setForeground(Color.BLACK);
-			}
-		} else if (expressionField == e.getSource()) {
-			if (StringUtils.isEmpty(culture.getVariable()) || StringUtils.isEmpty(culture.getExpression())) {
-				expressionField.setText("");
-				expressionField.setFont(FIELD_FILLED_FONT);
-				expressionField.setForeground(Color.BLACK);
-			}
-		} else if (quantityField == e.getSource()) {
-			if (StringUtils.isEmpty(culture.getVariable()) || StringUtils.isEmpty(culture.getExpression())) {
-				quantityField.setText("");
-				quantityField.setFont(FIELD_FILLED_FONT);
-				quantityField.setForeground(Color.BLACK);
+	public void focusGained(FocusEvent e) {		
+		for (JTextField field : new JTextField[] { nameField, expressionField, quantityField}) {
+			if (e.getSource() == field && field.getForeground() == Color.GRAY) {
+				field.setText("");
+				field.setFont(FIELD_FILLED_FONT);
+				field.setForeground(Color.BLACK);
 			}
 		}
 		
@@ -156,7 +144,7 @@ public class CulturePanel extends JPanel implements FocusListener {
 			if (StringUtils.isEmpty(expressionField.getText())) {
 				resetExpressionField();
 			} else {
-				Pattern pattern = Pattern.compile("([A-Za-z][A-Za-z0-9]*) *= *(.+$)");
+				Pattern pattern = Pattern.compile("([A-Za-z][A-Za-z0-9]*) *= *(.+)$");
 				Matcher matcher = pattern.matcher(expressionField.getText());
 				
 				if (matcher.find() && matcher.groupCount() == 2) {

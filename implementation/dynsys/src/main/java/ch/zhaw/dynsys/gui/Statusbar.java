@@ -39,7 +39,7 @@ public class Statusbar extends JPanel implements SimulationListener {
 	}
 
 	@Override
-	public void evolved(Collection<Culture> cultures) {}
+	public void evolved(Collection<Culture> cultures, long time) {}
 
 	@Override
 	public void clear() {}

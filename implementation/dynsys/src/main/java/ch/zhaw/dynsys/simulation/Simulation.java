@@ -7,13 +7,17 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.commons.jexl2.JexlException;
+
 import ch.zhaw.dynsys.el.utils.ExpressionUtil;
 
 public class Simulation implements CultureListener {	
 	private Map<String, Culture> cultures = new LinkedHashMap<String, Culture>();
 	private Timer timer = null;
 	private List<SimulationListener> simulationListeners = new ArrayList<SimulationListener>();
-
+	private long start;
+	private long time;
+	
 	public Simulation() {
 	}
 	
@@ -22,8 +26,11 @@ public class Simulation implements CultureListener {
 			l.started();
 		}
 		
+		start = System.currentTimeMillis(); 
+		time = start;
+		
 		timer = new Timer();
-		timer.scheduleAtFixedRate(new Task(simulationListeners), 0, 1000);
+		timer.schedule(new Task(simulationListeners), 0);
 	}
 
 	public void stop() {
@@ -53,12 +60,23 @@ public class Simulation implements CultureListener {
 		@Override
 		public void run() {
 			synchronized (cultures) {
-				ExpressionUtil.evaluateExpressions(cultures.values());
-				
-				for (SimulationListener l : simulationListeners) {
-					l.evolved(cultures.values());
+				try {
+					long now = System.currentTimeMillis();
+					ExpressionUtil.evaluateExpressions(cultures.values(), now-time);
+					
+					for (SimulationListener l : simulationListeners) {
+						l.evolved(cultures.values(), now-start);
+					}
+					
+					time = now;
+				} catch (JexlException e) {
+					// error in evaluation, stop simulation
+					stop();
 				}
 			}
+			
+			timer = new Timer();
+			timer.schedule(new Task(simulationListeners), 1000/60);
 		}
 	}
 
