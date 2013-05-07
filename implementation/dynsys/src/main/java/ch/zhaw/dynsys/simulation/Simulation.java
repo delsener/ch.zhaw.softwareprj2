@@ -25,6 +25,12 @@ public class Simulation {
 			return;
 		}
 		
+		for (Culture culture : cultures) {
+			if (!culture.isValid()) {
+				return;
+			}
+		}
+		
 		synchronized (lock) {
 			if (running) {
 				return;

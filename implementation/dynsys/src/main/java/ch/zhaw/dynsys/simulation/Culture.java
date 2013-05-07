@@ -12,6 +12,7 @@ public class Culture implements Serializable {
 	private String name = null;
 	private String expression = null;
 	private double population = Double.NaN;
+	private transient double value = 0;
 	private transient double growRate = 0; 
 	
 	
@@ -72,6 +73,16 @@ public class Culture implements Serializable {
 	}
 
 
+	public double getValue() {
+		return value;
+	}
+
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+
 	public double getGrowRate() {
 		return growRate;
 	}
@@ -79,5 +90,10 @@ public class Culture implements Serializable {
 
 	public void setGrowRate(double growRate) {
 		this.growRate = growRate;
+	}
+	
+	
+	public boolean isValid() {
+		return StringUtils.isNotBlank(name) && StringUtils.isNotBlank(expression) && !Double.isNaN(population); 
 	}
 }

@@ -22,15 +22,14 @@ public class Launcher {
 	public static void main(String[] args) {
 
 		// main frame
-		JFrame frame = new JFrame();
+		final JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Populations Dynmaik - dynamisches System");
 
 		// instance gui
-		final GraphPanel chartPanel = new GraphPanel();
+		final GraphPanel graphPanel = new GraphPanel();
 		final CultureEditor culturesEditor = new CultureEditor();
 		Statusbar statusbar = new Statusbar();
-		SimulationFactory simulationFactory = new SimulationFactory(culturesEditor.getCultures(), chartPanel);
 		final List<Simulation> simulations = new ArrayList<Simulation>();
 
 		// setup listeners
@@ -43,13 +42,13 @@ public class Launcher {
 		menubar.addMenuItem("View", "All", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				chartPanel.setViewAll(true);
+				graphPanel.setViewAll(true);
 			}
 		});
 		menubar.addMenuItem("View", "Lastest", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				chartPanel.setViewAll(false);
+				graphPanel.setViewAll(false);
 			}
 		});
 		menubar.addMenuItem("Simulation", "Run/Resume", new ActionListener() {
@@ -59,9 +58,22 @@ public class Launcher {
 					if (simulations.get(0).isRunning()) {
 						return;
 					}
+					culturesEditor.setEnabled(false);
+					culturesEditor.setVisible(false);
+					frame.revalidate();
+					frame.repaint();
 					simulations.get(0).start();
 				} else {
-					Simulation simulation = new Simulation(culturesEditor.getCultures(), chartPanel);
+					culturesEditor.setEnabled(false);
+					culturesEditor.setVisible(false);
+					frame.revalidate();
+					frame.repaint();
+					graphPanel.clear();
+					for (Culture culture : culturesEditor.getCultures()) {
+						culture.setValue(culture.getPopulation());
+					}
+					
+					Simulation simulation = new Simulation(culturesEditor.getCultures(), graphPanel);
 					simulations.add(simulation);
 					simulation.start();
 				}
@@ -75,6 +87,10 @@ public class Launcher {
 						simulation.stop();
 					}
 				}
+				culturesEditor.setEnabled(true);
+				culturesEditor.setVisible(true);
+				frame.revalidate();
+				frame.repaint();
 			}
 		});
 		menubar.addMenuItem("Simulation", "Stop", new ActionListener() {
@@ -86,6 +102,10 @@ public class Launcher {
 					}
 					simulations.clear();
 				}
+				culturesEditor.setEnabled(true);
+				culturesEditor.setVisible(true);
+				frame.revalidate();
+				frame.repaint();
 			}
 		});
 		menubar.addMenuItem("Info", "About", new ActionListener() {
@@ -100,7 +120,7 @@ public class Launcher {
 
 		// add simulation to menubar
 		frame.setJMenuBar(menubar);
-		frame.add(chartPanel, BorderLayout.CENTER);
+		frame.add(graphPanel, BorderLayout.CENTER);
 		frame.add(culturesEditor, BorderLayout.EAST);
 		frame.add(statusbar, BorderLayout.SOUTH);
 

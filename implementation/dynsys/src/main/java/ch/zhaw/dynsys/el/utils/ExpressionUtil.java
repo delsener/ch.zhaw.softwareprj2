@@ -46,7 +46,7 @@ public class ExpressionUtil {
 		// put all expressions in one string
 		StringBuilder expressionString = new StringBuilder();
 		for (Culture culture : cultures) {
-			expressionString.append("var " + culture.getVariable() + " = " + culture.getPopulation() + "\n");
+			expressionString.append("var " + culture.getVariable() + " = " + culture.getValue() + "\n");
 			expressionString.append("var " + culture.getVariable() + "_diff = " + culture.getGrowRate() + "\n");
 		}
 		
@@ -61,8 +61,6 @@ public class ExpressionUtil {
 		expressionString.delete(expressionString.length() -2, expressionString.length());
 		expressionString.append("];");
 		
-		System.out.println(expressionString);
-		
 		// create and evaluate expression
 		Script script = EL_ENGINE.createScript(expressionString.toString());
 		JexlContext context = new MapContext();
@@ -71,7 +69,7 @@ public class ExpressionUtil {
 		int i = 0;
 		for (Culture culture : cultures) {
 			culture.setGrowRate(results[i]);
-			culture.setPopulation(culture.getPopulation() + culture.getGrowRate());
+			culture.setValue(culture.getValue() + culture.getGrowRate());
 			i++;
 		}
 	}

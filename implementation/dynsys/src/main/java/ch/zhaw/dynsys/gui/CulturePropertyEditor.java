@@ -3,6 +3,7 @@ package ch.zhaw.dynsys.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -98,6 +99,17 @@ public class CulturePropertyEditor extends JPanel {
 	
 	public Culture getCulture() {
 		return culture;
+	}	
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		
+		getComponent(0).setEnabled(enabled);
+		
+		for (Component component : ((Container)getComponent(1)).getComponents()) {
+			component.setEnabled(enabled);
+		}
 	}
 
 

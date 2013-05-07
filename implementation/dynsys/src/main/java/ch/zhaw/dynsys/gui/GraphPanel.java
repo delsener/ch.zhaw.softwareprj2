@@ -91,6 +91,11 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 			domainAxis.setFixedAutoRange(LASTEST_TIME_FRAME);
 		}
 	}
+	
+	
+	public void clear() {
+		datasets.removeAllSeries();
+	}
 
 	@Override
 	public void evolved(final Collection<Culture> cultures, final long time) {
@@ -105,7 +110,7 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 		    		dataset.setKey(culture.getName());
 		    		Calendar calendar = Calendar.getInstance();
 		    		calendar.add(Calendar.MILLISECOND, (int)time);		    		
-		    		dataset.add(new Millisecond(calendar.getTime()), culture.getPopulation());
+		    		dataset.add(new Millisecond(calendar.getTime()), culture.getValue());
 		    		
 		    		i++;
 		    	}

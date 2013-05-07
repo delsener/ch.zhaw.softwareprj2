@@ -1,5 +1,6 @@
 package ch.zhaw.dynsys.gui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -87,5 +88,15 @@ public class CultureEditor extends JScrollPane {
 	
 	public List<Culture> getCultures() {
 		return cultures;
+	}
+	
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		
+		for (Component component : panel.getComponents()) {
+			component.setEnabled(enabled);
+		}
 	}
 }
