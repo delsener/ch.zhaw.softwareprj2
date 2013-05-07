@@ -6,8 +6,8 @@ public enum SystemConfigurations {
 
 	BARM_SUGAR_SYSTEM("Hefe-Zucker System", new Culture[]{
 			 new Culture("Temperatur (C°)", "2", -20),
-			 new Culture("Hefe", "math:max(-h, 0.00001 * h * z * (20 - math:abs(10 - t)) )", 100),
-			 new Culture("Zucker", "-math:max(0, 2*h_diff)", 400)
+			 new Culture("Hefe", "max(-h, 0.00001 * h * z * (20 - abs(10 - t)) )", 100),
+			 new Culture("Zucker", "-max(0, 2*h')", 400)
 	}),
 	
 	RABBIT_FOX_SYSTEM("Hasen-Fuchs System", new Culture[]{

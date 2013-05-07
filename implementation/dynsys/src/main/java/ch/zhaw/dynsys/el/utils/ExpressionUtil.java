@@ -53,10 +53,15 @@ public class ExpressionUtil {
 		// to get all values as result, put them in a map an return it 
 		expressionString.append("return [");
 		for (Culture culture : cultures) {
-			expressionString.append("new(\"java.lang.Double\"," + culture.getExpression() + "), ");
+			String exp = culture.getExpression().toLowerCase();
+			exp = exp.replaceAll("([a-z]+)'", "$1_diff"); // replace derivation '
+			exp = exp.replaceAll("([a-z]+)\\(", "math:$1\\("); // add math: namespace
+			expressionString.append("new(\"java.lang.Double\"," + exp + "), ");
 		}
 		expressionString.delete(expressionString.length() -2, expressionString.length());
 		expressionString.append("];");
+		
+		System.out.println(expressionString);
 		
 		// create and evaluate expression
 		Script script = EL_ENGINE.createScript(expressionString.toString());
