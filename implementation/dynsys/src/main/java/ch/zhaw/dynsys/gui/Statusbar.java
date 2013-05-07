@@ -1,7 +1,6 @@
 package ch.zhaw.dynsys.gui;
 
 import java.awt.Dimension;
-import java.util.Collection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -9,10 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
-import ch.zhaw.dynsys.simulation.Culture;
-import ch.zhaw.dynsys.simulation.SimulationListener;
-
-public class Statusbar extends JPanel implements SimulationListener {
+public class Statusbar extends JPanel {
 	private static final String READY = "Ready";
 	private static final String RUNNING = "Running";
 
@@ -28,20 +24,14 @@ public class Statusbar extends JPanel implements SimulationListener {
 		add(status);
 	}
 
-	@Override
-	public void started() {
-		status.setText(RUNNING);		
-	}
-
-	@Override
-	public void stoped() {
-		status.setText(READY);	
-	}
-
-	@Override
-	public void evolved(Collection<Culture> cultures, long time) {}
-
-	@Override
-	public void clear() {}
+//	@Override
+//	public void started() {
+//		status.setText(RUNNING);		
+//	}
+//
+//	@Override
+//	public void stoped() {
+//		status.setText(READY);	
+//	}
 
 }

@@ -3,10 +3,8 @@ package ch.zhaw.dynsys.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
@@ -18,25 +16,19 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTitleAnnotation;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.DateTickUnit;
-import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.YIntervalSeries;
-import org.jfree.data.xy.YIntervalSeriesCollection;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.RectangleEdge;
 
 import ch.zhaw.dynsys.simulation.Culture;
-import ch.zhaw.dynsys.simulation.SimulationListener;
 
-public class GraphPanel extends ChartPanel implements SimulationListener {
+public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.Simulation.Listener {
 	private static final int LASTEST_TIME_FRAME = 60000;
 
 	private static final long serialVersionUID = 1L;
@@ -124,15 +116,4 @@ public class GraphPanel extends ChartPanel implements SimulationListener {
 		    }
 		  });
 	}
-
-	@Override
-	public void started() {}
-	@Override
-	public void stoped() {}
-
-	@Override
-	public void clear() {
-		datasets.removeAllSeries();
-	}
-
 }

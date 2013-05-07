@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
-import ch.zhaw.dynsys.gui.SettingsPanel;
+import ch.zhaw.dynsys.gui.CultureEditor;
 import ch.zhaw.dynsys.simulation.configs.SystemConfigurations;
 
 /**
@@ -14,7 +14,7 @@ import ch.zhaw.dynsys.simulation.configs.SystemConfigurations;
  */
 public class LoadFromPresetsListener implements ActionListener {
 
-	private final SettingsPanel settingsPanel;
+	private final CultureEditor settingsPanel;
 
 	/**
 	 * Constructor.
@@ -22,7 +22,7 @@ public class LoadFromPresetsListener implements ActionListener {
 	 * @param settingsPanel
 	 *            the settings panel.
 	 */
-	public LoadFromPresetsListener(SettingsPanel settingsPanel) {
+	public LoadFromPresetsListener(CultureEditor settingsPanel) {
 		this.settingsPanel = settingsPanel;
 	}
 
@@ -41,8 +41,8 @@ public class LoadFromPresetsListener implements ActionListener {
 			return;
 		}
 
-		settingsPanel.resetSettingsPanel();
-		settingsPanel.addCultures(Arrays.asList(SystemConfigurations.getByName(result).getCultures()));
+		settingsPanel.removeAll();
+		settingsPanel.addAll(Arrays.asList(SystemConfigurations.getByName(result).getCultures()));
 	}
 
 }

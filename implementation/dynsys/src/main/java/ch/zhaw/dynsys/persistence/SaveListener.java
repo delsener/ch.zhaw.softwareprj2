@@ -7,7 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 import ch.zhaw.dynsys.gui.MessageHandler;
-import ch.zhaw.dynsys.gui.SettingsPanel;
+import ch.zhaw.dynsys.gui.CultureEditor;
 
 /**
  * Listener for the save action to display a file chooser dialog and save the
@@ -15,14 +15,14 @@ import ch.zhaw.dynsys.gui.SettingsPanel;
  */
 public class SaveListener implements ActionListener {
 
-	private final SettingsPanel settingsPanel;
+	private final CultureEditor settingsPanel;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @param settingsPanel the settings panel.
 	 */
-	public SaveListener(SettingsPanel settingsPanel) {
+	public SaveListener(CultureEditor settingsPanel) {
 		this.settingsPanel = settingsPanel;
 	}
 

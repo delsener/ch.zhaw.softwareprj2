@@ -5,14 +5,15 @@ import ch.zhaw.dynsys.simulation.Culture;
 public enum SystemConfigurations {
 
 	BARM_SUGAR_SYSTEM("Hefe-Zucker System", new Culture[]{
-//			new Culture("Temperatur (C°)", "t", "-math:sgn(t + 20) + H_diff", 50, false),
-//			new Culture("Hefe", "H", "0.001 * H * Z * (20 - math:abs(50 - t))", 100, true),
-//			new Culture("Zucker", "Z", "-math:max(0, H_diff)", 650, true)
-			
-			 new Culture("Temperatur (C°)", "t", "5", -20, false),
-			 new Culture("Hefe", "H", "math:max(-H, 0.0001 * H * Z * (20 - math:abs(10 - t)) )", 100, true),
-			 new Culture("Zucker", "Z", "math:min(0, -math:min(Z, H_diff))", 650, true)
-
+			 new Culture("Temperatur (C°)", "2", -20),
+			 new Culture("Hefe", "math:max(-h, 0.00001 * h * z * (20 - math:abs(10 - t)) )", 100),
+			 new Culture("Zucker", "-math:max(0, 2*h_diff)", 400)
+	}),
+	
+	RABBIT_FOX_SYSTEM("Hasen-Fuchs System", new Culture[]{
+			 new Culture("Karroten", "2", -20),
+			 new Culture("Hasen", "1 - 1 * f", 100),
+			 new Culture("Füchse", "1 + 1 * h", 100)
 	});
 	
 	private String name;

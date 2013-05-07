@@ -1,103 +1,100 @@
 package ch.zhaw.dynsys.simulation;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.apache.commons.jexl2.JexlException;
 
 import ch.zhaw.dynsys.el.utils.ExpressionUtil;
 
-public class Simulation implements CultureListener {	
-	private Map<String, Culture> cultures = new LinkedHashMap<String, Culture>();
-	private Timer timer = null;
-	private List<SimulationListener> simulationListeners = new ArrayList<SimulationListener>();
-	private long start;
-	private long time;
+public class Simulation {	
+	private List<Culture> cultures;
+	private Object lock = new Object();
+	private boolean running;
+	private Listener listener;
+	private long start = 0;
+	private Thread thread = null;
 	
-	public Simulation() {
+	public Simulation(List<Culture> cultures, Listener listener) {
+		this.cultures = cultures;
+		this.listener = listener;
 	}
 	
 	public void start() {
-		for (SimulationListener l : simulationListeners) {
-			l.started();
+		if (cultures.size() == 0) {
+			return;
 		}
 		
-		start = System.currentTimeMillis(); 
-		time = start;
+		synchronized (lock) {
+			if (running) {
+				return;
+			}
+		}
 		
-		timer = new Timer();
-		timer.schedule(new Task(simulationListeners), 0);
-	}
+		running = true;
 
-	public void stop() {
-		timer.cancel();
 		
-		for (SimulationListener l : simulationListeners) {
-			l.stoped();
-		}
-	}
-	
-	public void addSimulationListener(SimulationListener listener) {
-		simulationListeners.add(listener);
-	}
-	
-	public void removeSimulationListener(SimulationListener listener) {
-		simulationListeners.remove(listener);
-	}
-	
-	
-	private class Task extends TimerTask {
-		private List<SimulationListener> simulationListeners = new ArrayList<SimulationListener>();
+		start = System.currentTimeMillis();
 		
-		public Task(List<SimulationListener> simulationListeners) {
-			this.simulationListeners = simulationListeners;
-		}
-
-		@Override
-		public void run() {
-			synchronized (cultures) {
-				try {
-					long now = System.currentTimeMillis();
-					ExpressionUtil.evaluateExpressions(cultures.values(), now-time);
-					
-					for (SimulationListener l : simulationListeners) {
-						l.evolved(cultures.values(), now-start);
+		thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				boolean isRunning = true;
+				
+				
+				while (isRunning) {
+					try {
+						long now = System.currentTimeMillis();
+						long time = now - start;
+						ExpressionUtil.evaluateExpressions(cultures, time);
+						
+						listener.evolved(cultures, time);
+					} catch (JexlException e) {
+						// error in evaluation, stop simulation
+						stop();
 					}
 					
-					time = now;
-				} catch (JexlException e) {
-					// error in evaluation, stop simulation
-					stop();
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// do nothing
+					}
+					
+					synchronized (lock) {
+						isRunning = running;
+					}
 				}
 			}
-			
-			timer = new Timer();
-			timer.schedule(new Task(simulationListeners), 1000/60);
-		}
+		});
+		
+		thread.start();
 	}
 
-
-	public void clear() {
-		for (SimulationListener l : simulationListeners) {
-			l.clear();
+	public void stop() {		
+		synchronized (lock) {
+			if (!running) {
+				return;
+			}
+			
+			running = false;
+		}
+		
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
 		}
 	}
 	
-	@Override
-	public void changed(Culture culture) {
-		synchronized (cultures) {
-			cultures.put(culture.getVariable(), culture);
+	
+	public boolean isRunning() {
+		synchronized (lock) {
+			return running;
 		}
 	}
-
-	@Override
-	public void removed(Culture culture) {
-		synchronized (cultures) {
-			cultures.remove(culture.getVariable());
-		}
+	
+	
+	public static interface Listener {
+		public void evolved(Collection<Culture> cultures, long time);
 	}
 }

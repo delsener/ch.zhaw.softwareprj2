@@ -2,31 +2,35 @@ package ch.zhaw.dynsys.simulation;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Culture implements Serializable {
 
 	/** Generated <code>serialVersionUID</code>. */
 	private static final long serialVersionUID = -3694941572400029800L;
 	
-	private String name;
-	private String variable;
-	private String expression;
-	private double population;
-	private boolean excintion;
+	private String name = null;
+	private String expression = null;
+	private double population = Double.NaN;
 	private transient double growRate = 0; 
 	
 	
 	public Culture() {
-		super();
 	}
 
 
-	public Culture(String name, String variable, String expression, double population, boolean excintion) {
+	public Culture(String name, String expression, double population) {
 		super();
 		this.name = name;
-		this.variable = variable;
 		this.expression = expression;
 		this.population = population;
-		this.excintion = excintion;
+	}
+
+
+	public Culture(Culture culture) {
+		this.name = culture.getName();
+		this.expression = culture.getExpression();
+		this.population = culture.getPopulation();
 	}
 
 
@@ -41,12 +45,10 @@ public class Culture implements Serializable {
 
 
 	public String getVariable() {
-		return variable;
-	}
-
-
-	public void setVariable(String variable) {
-		this.variable = variable;
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		return name.substring(0,1).toLowerCase();
 	}
 
 
@@ -78,16 +80,4 @@ public class Culture implements Serializable {
 	public void setGrowRate(double growRate) {
 		this.growRate = growRate;
 	}
-
-
-	public boolean isExcintion() {
-		return excintion;
-	}
-
-
-	public void setExcintion(boolean excintion) {
-		this.excintion = excintion;
-	}
-	
-	
 }

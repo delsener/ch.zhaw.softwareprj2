@@ -8,8 +8,8 @@ import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import ch.zhaw.dynsys.gui.CultureEditor;
 import ch.zhaw.dynsys.gui.MessageHandler;
-import ch.zhaw.dynsys.gui.SettingsPanel;
 import ch.zhaw.dynsys.simulation.Culture;
 
 /**
@@ -17,14 +17,14 @@ import ch.zhaw.dynsys.simulation.Culture;
  */
 public class LoadFromFileListener implements ActionListener {
 
-	private final SettingsPanel settingsPanel;
+	private final CultureEditor settingsPanel;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @param settingsPanel the settings panel.
 	 */
-	public LoadFromFileListener(SettingsPanel settingsPanel) {
+	public LoadFromFileListener(CultureEditor settingsPanel) {
 		this.settingsPanel = settingsPanel;
 	}
 
@@ -53,8 +53,8 @@ public class LoadFromFileListener implements ActionListener {
 			return;
 		}
 		
-		settingsPanel.resetSettingsPanel();
-		settingsPanel.addCultures(cultures);
+		settingsPanel.removeAll();
+		settingsPanel.addAll(cultures);
 	}
 
 }
