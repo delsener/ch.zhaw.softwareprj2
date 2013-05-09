@@ -3,8 +3,10 @@ package ch.zhaw.dynsys.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
@@ -16,7 +18,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTitleAnnotation;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.LegendTitle;
@@ -37,6 +38,8 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 	private JFreeChart chart;
 	private XYPlot plot;
 	private DateAxis domainAxis;
+	
+	private List<TimeSeriesCollection> history = new ArrayList<TimeSeriesCollection>();
 
 	public GraphPanel() {
 		super(null);
@@ -55,7 +58,6 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 		plot.setDomainGridlinePaint(Color.gray);
 
 		// range axis
-		ValueAxis rangeAxis = plot.getRangeAxis();
 		plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 
 		// domain axis
@@ -95,6 +97,7 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 	
 	public void clear() {
 		datasets.removeAllSeries();
+		history.clear();
 	}
 
 	@Override
@@ -112,6 +115,7 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 		    		calendar.add(Calendar.MILLISECOND, (int)time);		    		
 		    		dataset.add(new Millisecond(calendar.getTime()), culture.getValue());
 		    		
+		    		history.add(datasets);
 		    		i++;
 		    	}
 		    	

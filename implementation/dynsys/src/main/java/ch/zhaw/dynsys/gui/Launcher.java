@@ -4,9 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -61,18 +59,15 @@ public class Launcher {
 					culturesEditor.setEnabled(false);
 					culturesEditor.setVisible(false);
 					frame.revalidate();
-					frame.repaint();
 					simulations.get(0).start();
 				} else {
 					culturesEditor.setEnabled(false);
 					culturesEditor.setVisible(false);
 					frame.revalidate();
-					frame.repaint();
 					graphPanel.clear();
 					for (Culture culture : culturesEditor.getCultures()) {
 						culture.setValue(culture.getPopulation());
 					}
-					
 					Simulation simulation = new Simulation(culturesEditor.getCultures(), graphPanel);
 					simulations.add(simulation);
 					simulation.start();
@@ -90,7 +85,6 @@ public class Launcher {
 				culturesEditor.setEnabled(true);
 				culturesEditor.setVisible(true);
 				frame.revalidate();
-				frame.repaint();
 			}
 		});
 		menubar.addMenuItem("Simulation", "Stop", new ActionListener() {
@@ -99,13 +93,13 @@ public class Launcher {
 				if (simulations.size() > 0) {
 					for (Simulation simulation : simulations) {
 						simulation.stop();
+						simulation.reset();
 					}
 					simulations.clear();
 				}
 				culturesEditor.setEnabled(true);
 				culturesEditor.setVisible(true);
 				frame.revalidate();
-				frame.repaint();
 			}
 		});
 		menubar.addMenuItem("Info", "About", new ActionListener() {
