@@ -29,6 +29,7 @@ public class Simulation {
 			if (!culture.isValid()) {
 				return;
 			}
+			culture.setSimulation(this);
 		}
 
 		synchronized (lock) {
@@ -101,7 +102,7 @@ public class Simulation {
 	public static interface Listener {
 		public void evolved(Collection<Culture> cultures, long time);
 	}
-	
+
 	public void reset() {
 		start = 0;
 	}

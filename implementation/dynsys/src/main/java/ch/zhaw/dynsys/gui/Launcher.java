@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import ch.zhaw.dynsys.persistence.LoadFromFileListener;
 import ch.zhaw.dynsys.persistence.LoadFromPresetsListener;
@@ -25,18 +26,22 @@ public class Launcher {
 		frame.setTitle("Populations Dynmaik - dynamisches System");
 
 		// instance gui
-		final GraphPanel graphPanel = new GraphPanel();
+		final JPanel glassPane = (JPanel) frame.getGlassPane();
+		final GraphPanel graphPanel = new GraphPanel(glassPane);
 		final CultureEditor culturesEditor = new CultureEditor();
 		Statusbar statusbar = new Statusbar();
 		final List<Simulation> simulations = new ArrayList<Simulation>();
 
 		// setup listeners
 		Menubar menubar = new Menubar();
-		
+
 		// menu items
-		menubar.addMenuItem("File", "Open..", new LoadFromFileListener(culturesEditor));
-		menubar.addMenuItem("File", "Import..", new LoadFromPresetsListener(culturesEditor));
-		menubar.addMenuItem("File", "Save As..", new SaveListener(culturesEditor));
+		menubar.addMenuItem("File", "Open..", new LoadFromFileListener(
+				culturesEditor, graphPanel.getGraphValuesPanel()));
+		menubar.addMenuItem("File", "Import..", new LoadFromPresetsListener(
+				culturesEditor, graphPanel.getGraphValuesPanel()));
+		menubar.addMenuItem("File", "Save As..", new SaveListener(
+				culturesEditor));
 		menubar.addMenuItem("View", "All", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -59,16 +64,19 @@ public class Launcher {
 					culturesEditor.setEnabled(false);
 					culturesEditor.setVisible(false);
 					frame.revalidate();
+					glassPane.setVisible(true);
 					simulations.get(0).start();
 				} else {
 					culturesEditor.setEnabled(false);
 					culturesEditor.setVisible(false);
 					frame.revalidate();
+					glassPane.setVisible(true);
 					graphPanel.clear();
 					for (Culture culture : culturesEditor.getCultures()) {
 						culture.setValue(culture.getPopulation());
 					}
-					Simulation simulation = new Simulation(culturesEditor.getCultures(), graphPanel);
+					Simulation simulation = new Simulation(culturesEditor
+							.getCultures(), graphPanel);
 					simulations.add(simulation);
 					simulation.start();
 				}
@@ -84,6 +92,7 @@ public class Launcher {
 				}
 				culturesEditor.setEnabled(true);
 				culturesEditor.setVisible(true);
+				glassPane.setVisible(false);
 				frame.revalidate();
 			}
 		});
@@ -99,6 +108,7 @@ public class Launcher {
 				}
 				culturesEditor.setEnabled(true);
 				culturesEditor.setVisible(true);
+				glassPane.setVisible(false);
 				frame.revalidate();
 			}
 		});
@@ -118,7 +128,7 @@ public class Launcher {
 		frame.add(culturesEditor, BorderLayout.EAST);
 		frame.add(statusbar, BorderLayout.SOUTH);
 
-		culturesEditor.add(new Culture());
+		culturesEditor.add(new Culture(0));
 
 		// show
 		frame.pack();
