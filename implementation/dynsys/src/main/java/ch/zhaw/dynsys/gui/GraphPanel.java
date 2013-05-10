@@ -1,5 +1,6 @@
 package ch.zhaw.dynsys.gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Calendar;
@@ -59,6 +60,7 @@ public class GraphPanel extends ChartPanel implements
 		// chart
 		chart = ChartFactory.createTimeSeriesChart(null, null, null, datasets,
 				false, false, false);
+		chart.setAntiAlias(true);
 
 		// plot
 		plot = (XYPlot) chart.getPlot();
@@ -129,6 +131,7 @@ public class GraphPanel extends ChartPanel implements
 						datasets.addSeries(new TimeSeries(culture.getName()));
 					}
 					TimeSeries dataset = datasets.getSeries(i);
+					plot.getRenderer().setSeriesStroke(i, new BasicStroke(2.0f));
 					dataset.setKey(culture.getName());
 					Calendar calendar = Calendar.getInstance();
 					calendar.add(Calendar.MILLISECOND, (int) time);
