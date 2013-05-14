@@ -65,8 +65,8 @@ public class GraphValuesPanel extends JPanel {
 		textPanel.add(textField);
 		textField.setEditable(false);
 
-		JButton minus = new JButton(new ImageIcon(
-				"src/main/resources/minus.png"));
+		JButton minus = new JButton(new ImageIcon(getClass().getClassLoader()
+				.getResource("minus.png")));
 		minus.setBackground(Color.WHITE);
 		minus.setBorderPainted(false);
 		minus.setPreferredSize(new Dimension(16, 16));
@@ -96,7 +96,8 @@ public class GraphValuesPanel extends JPanel {
 			}
 		});
 
-		JButton plus = new JButton(new ImageIcon("src/main/resources/plus.png"));
+		JButton plus = new JButton(new ImageIcon(getClass().getClassLoader()
+				.getResource("plus.png")));
 		plus.setBackground(Color.WHITE);
 		plus.setBorderPainted(false);
 		plus.setPreferredSize(new Dimension(16, 16));
