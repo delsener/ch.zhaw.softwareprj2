@@ -3,18 +3,14 @@ package ch.zhaw.dynsys.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import ch.zhaw.dynsys.persistence.LoadFromFileListener;
 import ch.zhaw.dynsys.persistence.LoadFromPresetsListener;
 import ch.zhaw.dynsys.persistence.SaveListener;
 import ch.zhaw.dynsys.simulation.Culture;
-import ch.zhaw.dynsys.simulation.Simulation;
 
 public class Launcher {
 
@@ -26,20 +22,19 @@ public class Launcher {
 		frame.setTitle("Populations Dynmaik - dynamisches System");
 
 		// instance gui
-		final JPanel glassPane = (JPanel) frame.getGlassPane();
-		final GraphPanel graphPanel = new GraphPanel(glassPane);
+		final GraphPanel graphPanel = new GraphPanel();
+		SimulationFactory.setListener(graphPanel);
 		final CultureEditor culturesEditor = new CultureEditor();
-		Statusbar statusbar = new Statusbar();
-		final List<Simulation> simulations = new ArrayList<Simulation>();
+		final Statusbar statusbar = new Statusbar();
 
 		// setup listeners
 		Menubar menubar = new Menubar();
 
 		// menu items
 		menubar.addMenuItem("File", "Open..", new LoadFromFileListener(
-				culturesEditor, graphPanel.getGraphValuesPanel()));
+				culturesEditor));
 		menubar.addMenuItem("File", "Import..", new LoadFromPresetsListener(
-				culturesEditor, graphPanel.getGraphValuesPanel()));
+				culturesEditor));
 		menubar.addMenuItem("File", "Save As..", new SaveListener(
 				culturesEditor));
 		menubar.addMenuItem("View", "All", new ActionListener() {
@@ -57,59 +52,26 @@ public class Launcher {
 		menubar.addMenuItem("Simulation", "Run/Resume", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (simulations.size() > 0) {
-					if (simulations.get(0).isRunning()) {
-						return;
-					}
-					culturesEditor.setEnabled(false);
-					culturesEditor.setVisible(false);
-					frame.revalidate();
-					glassPane.setVisible(true);
-					simulations.get(0).start();
-				} else {
-					culturesEditor.setEnabled(false);
-					culturesEditor.setVisible(false);
-					frame.revalidate();
-					glassPane.setVisible(true);
-					graphPanel.clear();
-					for (Culture culture : culturesEditor.getCultures()) {
-						culture.setValue(culture.getPopulation());
-					}
-					Simulation simulation = new Simulation(culturesEditor
-							.getCultures(), graphPanel);
-					simulations.add(simulation);
-					simulation.start();
-				}
+				culturesEditor.setVisible(false);
+				SimulationFactory.getInstance().start();
+				statusbar.started();
 			}
 		});
 		menubar.addMenuItem("Simulation", "Pause", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (simulations.size() > 0) {
-					for (Simulation simulation : simulations) {
-						simulation.stop();
-					}
-				}
-				culturesEditor.setEnabled(true);
+				SimulationFactory.getInstance().stop();
 				culturesEditor.setVisible(true);
-				glassPane.setVisible(false);
-				frame.revalidate();
+				statusbar.stoped();
 			}
 		});
 		menubar.addMenuItem("Simulation", "Stop", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (simulations.size() > 0) {
-					for (Simulation simulation : simulations) {
-						simulation.stop();
-						simulation.reset();
-					}
-					simulations.clear();
-				}
-				culturesEditor.setEnabled(true);
+				SimulationFactory.getInstance().stop();
+				SimulationFactory.newInstance(culturesEditor.getCultures());
 				culturesEditor.setVisible(true);
-				glassPane.setVisible(false);
-				frame.revalidate();
+				statusbar.stoped();
 			}
 		});
 		menubar.addMenuItem("Info", "About", new ActionListener() {
@@ -128,7 +90,7 @@ public class Launcher {
 		frame.add(culturesEditor, BorderLayout.EAST);
 		frame.add(statusbar, BorderLayout.SOUTH);
 
-		culturesEditor.add(new Culture(0));
+		culturesEditor.add(new Culture());
 
 		// show
 		frame.pack();

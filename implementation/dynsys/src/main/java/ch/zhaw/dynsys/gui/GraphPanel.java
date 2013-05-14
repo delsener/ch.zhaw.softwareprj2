@@ -2,11 +2,11 @@ package ch.zhaw.dynsys.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
-import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
-import javax.swing.JPanel;
+import javax.swing.JFrame;
 import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
@@ -16,13 +16,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisLocation;
-import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.DefaultDrawingSupplier;
 import org.jfree.chart.plot.SeriesRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import ch.zhaw.dynsys.simulation.Culture;
 
@@ -33,30 +32,24 @@ public class GraphPanel extends ChartPanel implements
 			Color.ORANGE, Color.PINK, Color.GREEN, Color.CYAN, Color.DARK_GRAY,
 			Color.BLACK, Color.YELLOW };
 
-	private static final int LASTEST_TIME_FRAME = 60000;
+	private static final int LASTEST_TIME_FRAME = 200;
 	private static final long serialVersionUID = 1L;
 
-	private TimeSeriesCollection datasets = new TimeSeriesCollection();
+	private XYSeriesCollection datasets = new XYSeriesCollection();
 	private JFreeChart chart;
 	private XYPlot plot;
-	private DateAxis domainAxis;
+	private ValueAxis domainAxis;
+	
+	private List<Culture> cultures;
 
-	private GraphValuesPanel graphValuesPanel;
+	private double iteration = 0;
+	
+	private Legend legend;
 
-	public GraphPanel(JPanel glassPane) {
+	public GraphPanel() {
 		super(null);
 
 		setPreferredSize(new Dimension(800, 600));
-
-		// create values panel and add to frames glasspane
-		graphValuesPanel = new GraphValuesPanel();
-		SpringLayout springLayout = new SpringLayout();
-		glassPane.setLayout(springLayout);
-		glassPane.add(graphValuesPanel);
-		springLayout.putConstraint(SpringLayout.NORTH, graphValuesPanel, 400,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, graphValuesPanel, 20,
-				SpringLayout.WEST, this);
 
 		// chart
 		chart = ChartFactory.createTimeSeriesChart(null, null, null, datasets,
@@ -82,29 +75,14 @@ public class GraphPanel extends ChartPanel implements
 		plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 
 		// domain axis
-		domainAxis = (DateAxis) plot.getDomainAxis();
-		domainAxis.setLabel("Time");
-		// domainAxis.setVerticalTickLabels(true);
-		domainAxis.setAutoTickUnitSelection(true);
-		domainAxis.setFixedAutoRange(LASTEST_TIME_FRAME);
-		plot.setDomainAxis(domainAxis);
+		domainAxis = (ValueAxis) plot.getDomainAxis();
+		domainAxis.setVisible(false);
 
-		// legend
-		// LegendTitle legend = new LegendTitle(plot);
-		// legend.setItemFont(new Font("Dialog", Font.PLAIN, 9));
-		// legend.setItemPaint(Color.gray);
-		// legend.setBackgroundPaint(Color.white);
-		// legend.setFrame(new BlockBorder(Color.gray));
-		// legend.setPosition(RectangleEdge.LEFT);
-		// XYTitleAnnotation ta = new XYTitleAnnotation(0.01, 0.02, legend,
-		// RectangleAnchor.BOTTOM_LEFT);
-		// plot.addAnnotation(ta);
-
-		// usability
-		setMouseWheelEnabled(true);
 
 		setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
 		setChart(chart);
+		
+		setViewAll(false);
 	}
 
 	public void setViewAll(boolean flag) {
@@ -117,36 +95,66 @@ public class GraphPanel extends ChartPanel implements
 
 	public void clear() {
 		datasets.removeAllSeries();
+		iteration = 0;
 	}
 
-	public GraphValuesPanel getGraphValuesPanel() {
-		return graphValuesPanel;
-	}
 
 	@Override
-	public void evolved(final Collection<Culture> cultures, final long time) {
+	public void start(final List<Culture> cultures) {
+		this.cultures = cultures;
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				int i = 0;
-				for (Culture culture : cultures) {
-					if (i >= datasets.getSeriesCount()) {
-						datasets.addSeries(new TimeSeries(culture.getName()));
-					}
-					TimeSeries dataset = datasets.getSeries(i);
+				clear();
+				
+				for (int i = 0; i < cultures.size(); i++) {
+					Culture culture = cultures.get(i);
+					XYSeries serie = new XYSeries(culture.getName());
+					serie.add(iteration, culture.getValue());
+					datasets.addSeries(serie);
 					plot.getRenderer().setSeriesStroke(i, new BasicStroke(2.0f));
-					dataset.setKey(culture.getName());
-					Calendar calendar = Calendar.getInstance();
-					calendar.add(Calendar.MILLISECOND, (int) time);
-					dataset.add(new Millisecond(calendar.getTime()),
-							culture.getValue());
-					graphValuesPanel.setValue(culture);
-
-					i++;
 				}
+				
+				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(GraphPanel.this);
+				Container glassPane = (Container)frame.getGlassPane();
+				glassPane.removeAll();
+				
+				legend = new Legend(GraphPanel.this.cultures);
+				SpringLayout springLayout = new SpringLayout();
+				glassPane.setLayout(springLayout);
+				glassPane.add(legend);
+				glassPane.setVisible(true);
+				springLayout.putConstraint(SpringLayout.SOUTH, legend, 0,
+						SpringLayout.SOUTH, GraphPanel.this);
+				springLayout.putConstraint(SpringLayout.WEST, legend, 20,
+						SpringLayout.WEST, GraphPanel.this);
 
 				// update chart
 				revalidate();
 				repaint();
+				
+				iteration++;
+			}
+		});
+	}
+
+	@Override
+	public void updated() {		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				for (int i = 0; i < cultures.size(); i++) {
+					Culture culture = cultures.get(i);
+					XYSeries dataset = datasets.getSeries(i);
+					dataset.add(iteration, culture.getValue());
+				}
+				
+				legend.update();
+
+				// update chart
+				revalidate();
+				repaint();
+				
+				iteration++;
 			}
 		});
 	}

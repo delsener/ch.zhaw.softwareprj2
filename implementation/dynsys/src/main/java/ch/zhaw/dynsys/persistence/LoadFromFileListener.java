@@ -9,8 +9,9 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import ch.zhaw.dynsys.gui.CultureEditor;
-import ch.zhaw.dynsys.gui.GraphValuesPanel;
+import ch.zhaw.dynsys.gui.Legend;
 import ch.zhaw.dynsys.gui.MessageHandler;
+import ch.zhaw.dynsys.gui.SimulationFactory;
 import ch.zhaw.dynsys.simulation.Culture;
 
 /**
@@ -19,7 +20,6 @@ import ch.zhaw.dynsys.simulation.Culture;
 public class LoadFromFileListener implements ActionListener {
 
 	private final CultureEditor settingsPanel;
-	private final GraphValuesPanel graphValuesPanel;
 
 	/**
 	 * Constructor.
@@ -27,12 +27,10 @@ public class LoadFromFileListener implements ActionListener {
 	 * @param settingsPanel
 	 *            the settings panel.
 	 * @param graphValuesPanel
-	 *            the {@link GraphValuesPanel}.
+	 *            the {@link Legend}.
 	 */
-	public LoadFromFileListener(CultureEditor settingsPanel,
-			GraphValuesPanel graphValuesPanel) {
+	public LoadFromFileListener(CultureEditor settingsPanel) {
 		this.settingsPanel = settingsPanel;
-		this.graphValuesPanel = graphValuesPanel;
 	}
 
 	@Override
@@ -62,9 +60,14 @@ public class LoadFromFileListener implements ActionListener {
 			return;
 		}
 
-		graphValuesPanel.reset();
+		SimulationFactory.getInstance().stop();
+		
 		settingsPanel.removeAll();
 		settingsPanel.addAll(cultures);
+		settingsPanel.setVisible(true);
+		
+		SimulationFactory.newInstance(cultures);
+		
 	}
 
 }

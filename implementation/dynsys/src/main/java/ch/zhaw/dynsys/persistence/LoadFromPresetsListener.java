@@ -3,11 +3,14 @@ package ch.zhaw.dynsys.persistence;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import ch.zhaw.dynsys.gui.CultureEditor;
-import ch.zhaw.dynsys.gui.GraphValuesPanel;
+import ch.zhaw.dynsys.gui.Legend;
+import ch.zhaw.dynsys.gui.SimulationFactory;
+import ch.zhaw.dynsys.simulation.Culture;
 import ch.zhaw.dynsys.simulation.configs.SystemConfigurations;
 
 /**
@@ -16,7 +19,6 @@ import ch.zhaw.dynsys.simulation.configs.SystemConfigurations;
 public class LoadFromPresetsListener implements ActionListener {
 
 	private final CultureEditor settingsPanel;
-	private final GraphValuesPanel graphValuesPanel;
 
 	/**
 	 * Constructor.
@@ -24,12 +26,10 @@ public class LoadFromPresetsListener implements ActionListener {
 	 * @param settingsPanel
 	 *            the settings panel.
 	 * @param graphValuesPanel
-	 *            the {@link GraphValuesPanel}.
+	 *            the {@link Legend}.
 	 */
-	public LoadFromPresetsListener(CultureEditor settingsPanel,
-			GraphValuesPanel graphValuesPanel) {
+	public LoadFromPresetsListener(CultureEditor settingsPanel) {
 		this.settingsPanel = settingsPanel;
-		this.graphValuesPanel = graphValuesPanel;
 	}
 
 	@Override
@@ -44,10 +44,13 @@ public class LoadFromPresetsListener implements ActionListener {
 			return;
 		}
 
-		graphValuesPanel.reset();
+		SimulationFactory.getInstance().stop();
+		
+		List<Culture> cultures = Arrays.asList(SystemConfigurations.getByName(result).getCultures());
 		settingsPanel.removeAll();
-		settingsPanel.addAll(Arrays.asList(SystemConfigurations.getByName(
-				result).getCultures()));
+		settingsPanel.addAll(cultures);
+		settingsPanel.setVisible(true);
+		
+		SimulationFactory.newInstance(cultures);
 	}
-
 }

@@ -24,14 +24,12 @@ public class Statusbar extends JPanel {
 		add(status);
 	}
 
-//	@Override
-//	public void started() {
-//		status.setText(RUNNING);		
-//	}
-//
-//	@Override
-//	public void stoped() {
-//		status.setText(READY);	
-//	}
+	public void started() {
+		status.setText(RUNNING);		
+	}
+
+	public void stoped() {
+		status.setText(READY);	
+	}
 
 }

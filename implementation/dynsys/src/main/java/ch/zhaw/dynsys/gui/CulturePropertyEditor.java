@@ -7,10 +7,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import org.apache.commons.lang3.StringUtils;
 
 import ch.zhaw.dynsys.simulation.Culture;
+import ch.zhaw.dynsys.simulation.Simulation;
 
 public class CulturePropertyEditor extends JPanel {
 
@@ -41,6 +42,25 @@ public class CulturePropertyEditor extends JPanel {
 		close.setBorder(new EmptyBorder(0, 0, 0, 5));
 		close.setPreferredSize(new Dimension(10, 10));
 		close.setContentAreaFilled(false);
+		close.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Component button = (Component) e.getSource();
+				Component propertyEditor = button.getParent();
+				Container cultureEditor = (Container)propertyEditor.getParent();
+				
+				Simulation simulation = SimulationFactory.getInstance();
+				List<Culture> cultures = simulation.getCultures();
+				cultures.remove(CulturePropertyEditor.this.culture);
+				SimulationFactory.newInstance(cultures);
+
+				cultureEditor.remove(propertyEditor);
+				cultureEditor.revalidate();
+				cultureEditor.repaint();
+				
+			}
+		});
 		add(close, BorderLayout.NORTH);
 
 		JPanel items = new JPanel(new SpringLayout());
@@ -91,44 +111,7 @@ public class CulturePropertyEditor extends JPanel {
 				6, 6);
 	}
 
-	public void addCloseListener(ActionListener l) {
-		((JButton) getComponent(0)).addActionListener(new CloseListenerAdapter(
-				l));
-	}
-
 	public Culture getCulture() {
 		return culture;
 	}
-
-	@Override
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
-
-		getComponent(0).setEnabled(enabled);
-
-		for (Component component : ((Container) getComponent(1))
-				.getComponents()) {
-			component.setEnabled(enabled);
-		}
-	}
-
-	private class CloseListenerAdapter implements ActionListener {
-
-		private ActionListener listener;
-
-		public CloseListenerAdapter(ActionListener listener) {
-			super();
-			this.listener = listener;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JComponent button = (JComponent) e.getSource();
-			e.setSource(button.getParent());
-
-			listener.actionPerformed(e);
-		}
-
-	}
-
 }

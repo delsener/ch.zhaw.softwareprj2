@@ -1,6 +1,5 @@
 package ch.zhaw.dynsys.gui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +8,6 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -36,7 +34,7 @@ public class CultureEditor extends JScrollPane {
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				add(new Culture(cultures.size()));
+				add(new Culture());
 			}
 		});
 		panel.add(add);
@@ -54,17 +52,7 @@ public class CultureEditor extends JScrollPane {
 
 	public void add(Culture culture) {
 		cultures.add(culture);
-		CulturePropertyEditor culturePanel = new CulturePropertyEditor(culture);
-		ActionListener closeListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel.remove((JComponent) e.getSource());
-				panel.revalidate();
-				panel.repaint();
-			}
-		};
-		culturePanel.addCloseListener(closeListener);
-		panel.add(culturePanel, panel.getComponentCount() - 1);
+		panel.add(new CulturePropertyEditor(culture), panel.getComponentCount() - 1);
 		panel.revalidate();
 		panel.repaint();
 	}
@@ -87,11 +75,9 @@ public class CultureEditor extends JScrollPane {
 	}
 
 	@Override
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
-
-		for (Component component : panel.getComponents()) {
-			component.setEnabled(enabled);
-		}
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		getParent().revalidate();
+		getParent().repaint();
 	}
 }

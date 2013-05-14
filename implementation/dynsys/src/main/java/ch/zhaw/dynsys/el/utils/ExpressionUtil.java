@@ -37,7 +37,7 @@ public class ExpressionUtil {
 	}
 
 	
-	public static void evaluateExpressions(Collection<Culture> cultures, long time) {
+	public static void evaluateExpressions(Collection<Culture> cultures, double step) {
 		if (cultures.size() == 0) {
 			return;
 		}
@@ -67,7 +67,7 @@ public class ExpressionUtil {
 		double[] results = (double[]) script.execute(context);
 		int i = 0;
 		for (Culture culture : cultures) {
-			culture.setGrowRate(results[i]);
+			culture.setGrowRate(results[i] * step);
 			culture.setValue(culture.getValue() + culture.getGrowRate());
 			i++;
 		}

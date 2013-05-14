@@ -14,25 +14,21 @@ public class Culture implements Serializable {
 	private double population = Double.NaN;
 	private transient double value = 0;
 	private transient double growRate = 0;
-	private transient final int index;
-	private transient Simulation simulation;
 
-	public Culture(int index) {
-		this.index = index;
+	public Culture() {
+		super();
 	}
 
-	public Culture(int index, String name, String expression, double population) {
+	public Culture(String name, String expression, double population) {
 		this.name = name;
 		this.expression = expression;
 		this.population = population;
-		this.index = index;
 	}
 
-	public Culture(int index, Culture culture) {
+	public Culture(Culture culture) {
 		this.name = culture.getName();
 		this.expression = culture.getExpression();
 		this.population = culture.getPopulation();
-		this.index = index;
 	}
 
 	public String getName() {
@@ -82,21 +78,9 @@ public class Culture implements Serializable {
 		this.growRate = growRate;
 	}
 
-	public int getIndex() {
-		return index;
-	}
-
 	public boolean isValid() {
 		return StringUtils.isNotBlank(name)
 				&& StringUtils.isNotBlank(expression)
 				&& !Double.isNaN(population);
-	}
-
-	public Simulation getSimulation() {
-		return simulation;
-	}
-
-	public void setSimulation(Simulation simulation) {
-		this.simulation = simulation;
 	}
 }

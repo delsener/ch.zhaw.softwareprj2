@@ -1,6 +1,5 @@
 package ch.zhaw.dynsys.simulation;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.jexl2.JexlException;
@@ -12,7 +11,6 @@ public class Simulation {
 	private Object lock = new Object();
 	private boolean running;
 	private Listener listener;
-	private long start = 0;
 	private Thread thread = null;
 
 	public Simulation(List<Culture> cultures, Listener listener) {
@@ -29,7 +27,7 @@ public class Simulation {
 			if (!culture.isValid()) {
 				return;
 			}
-			culture.setSimulation(this);
+			culture.setValue(culture.getPopulation());
 		}
 
 		synchronized (lock) {
@@ -37,12 +35,13 @@ public class Simulation {
 				return;
 			}
 		}
+		
+		final double iteration = 0.01;
+		if (thread == null) {		
+			listener.start(cultures);
+		}
 
 		running = true;
-
-		if (start == 0) {
-			start = System.currentTimeMillis();
-		}
 
 		thread = new Thread(new Runnable() {
 
@@ -52,18 +51,16 @@ public class Simulation {
 
 				while (isRunning) {
 					try {
-						long now = System.currentTimeMillis();
-						long time = now - start;
-						ExpressionUtil.evaluateExpressions(cultures, time);
+						ExpressionUtil.evaluateExpressions(cultures, iteration);
 
-						listener.evolved(cultures, time);
+						listener.updated();
 					} catch (JexlException e) {
 						// error in evaluation, stop simulation
 						stop();
 					}
 
 					try {
-						Thread.sleep(100);
+						Thread.sleep(60);
 					} catch (InterruptedException e) {
 						// do nothing
 					}
@@ -100,10 +97,13 @@ public class Simulation {
 	}
 
 	public static interface Listener {
-		public void evolved(Collection<Culture> cultures, long time);
+		public void start(List<Culture> cultures);
+		public void updated();
 	}
 
-	public void reset() {
-		start = 0;
+	public List<Culture> getCultures() {
+		return cultures;
 	}
+
+	
 }
