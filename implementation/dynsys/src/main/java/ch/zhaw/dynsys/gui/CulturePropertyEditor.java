@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.lang3.StringUtils;
 
+import ch.zhaw.dynsys.el.utils.ExpressionUtil;
 import ch.zhaw.dynsys.simulation.Culture;
 import ch.zhaw.dynsys.simulation.Simulation;
 
@@ -46,6 +47,8 @@ public class CulturePropertyEditor extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				addLastOne();
+				
 				Component button = (Component) e.getSource();
 				Component propertyEditor = button.getParent();
 				Container cultureEditor = (Container)propertyEditor.getParent();
@@ -66,10 +69,12 @@ public class CulturePropertyEditor extends JPanel {
 		JPanel items = new JPanel(new SpringLayout());
 
 		// name label
-		items.add(new JValidatedField(50, "Rabbit", culture.getName(),
+		items.add(new JValidatedField(50, "Name", culture.getName(),
 				new JValidatedField.Validator() {
 					@Override
 					public boolean validate(String value) {
+						addLastOne();
+						
 						if (StringUtils.isBlank(value)) {
 							return false;
 						}
@@ -80,21 +85,29 @@ public class CulturePropertyEditor extends JPanel {
 				}));
 
 		// quantity
-		items.add(new JValidatedField(50, "cos(t)", culture.getExpression(),
+		items.add(new JValidatedField(50, "Function", culture.getExpression(),
 				new JValidatedField.Validator() {
 					@Override
 					public boolean validate(String value) {
-						culture.setExpression(value);
-						return true;
+						addLastOne();
+						try {
+							ExpressionUtil.evaluateExpressions(SimulationFactory.getInstance().getCultures(), 1);
+							culture.setExpression(value);
+							return true;
+						} catch (Exception e) {
+							return false;
+						}
 					}
 				}));
 
 		// expression
-		items.add(new JValidatedField(50, "120", Double.isNaN(culture
+		items.add(new JValidatedField(50, "Start value", Double.isNaN(culture
 				.getPopulation()) ? null : String.valueOf(culture
 				.getPopulation()), new JValidatedField.Validator() {
 			@Override
 			public boolean validate(String value) {
+				addLastOne();
+				
 				try {
 					culture.setPopulation(Double.parseDouble(value));
 					return true;
@@ -113,5 +126,18 @@ public class CulturePropertyEditor extends JPanel {
 
 	public Culture getCulture() {
 		return culture;
+	}
+	
+	
+	private void addLastOne() {
+		Container container = (Container)getParent();
+		
+		if (container.getComponent(container.getComponentCount() - 1) != this) {
+			return;
+		}
+		
+		container.add(new CulturePropertyEditor(new Culture()));
+		container.revalidate();
+		container.repaint();
 	}
 }

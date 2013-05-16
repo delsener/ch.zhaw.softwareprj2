@@ -113,6 +113,7 @@ public class GraphPanel extends ChartPanel implements
 					serie.add(iteration, culture.getValue());
 					datasets.addSeries(serie);
 					plot.getRenderer().setSeriesStroke(i, new BasicStroke(2.0f));
+					plot.getRenderer().setSeriesVisible(i, culture.getExpression() != null && !"0".equals(culture.getExpression().trim()));
 				}
 				
 				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(GraphPanel.this);

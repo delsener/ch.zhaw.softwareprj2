@@ -1,17 +1,12 @@
 package ch.zhaw.dynsys.gui;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 import ch.zhaw.dynsys.simulation.Culture;
 
@@ -24,20 +19,8 @@ public class CultureEditor extends JScrollPane {
 	public CultureEditor() {
 		this.panel = new JPanel();
 		this.cultures = new ArrayList<Culture>();
-
+		
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-
-		JButton add = new JButton("+");
-		add.setHorizontalAlignment(SwingConstants.RIGHT);
-		add.setBorder(new EmptyBorder(5, 5, 5, 5));
-		add.setContentAreaFilled(false);
-		add.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				add(new Culture());
-			}
-		});
-		panel.add(add);
 
 		Dimension d = new Dimension(300, 100);
 		getVerticalScrollBar().setUnitIncrement(d.height);
@@ -52,22 +35,19 @@ public class CultureEditor extends JScrollPane {
 
 	public void add(Culture culture) {
 		cultures.add(culture);
-		panel.add(new CulturePropertyEditor(culture), panel.getComponentCount() - 1);
-		panel.revalidate();
-		panel.repaint();
+		panel.add(new CulturePropertyEditor(culture));
+
 	}
 
-	public void addAll(List<Culture> cultures) {
+	public void set(List<Culture> cultures) {
+		panel.removeAll();
+		this.cultures.clear();
 		for (Culture culture : cultures) {
 			add(culture);
 		}
-	}
-
-	public void removeAll() {
-		cultures.clear();
-		for (int i = 0; i < panel.getComponentCount() - 1; i++) {
-			panel.remove(i);
-		}
+		add(new Culture());
+		revalidate();
+		repaint();	
 	}
 
 	public List<Culture> getCultures() {
@@ -79,5 +59,7 @@ public class CultureEditor extends JScrollPane {
 		super.setVisible(visible);
 		getParent().revalidate();
 		getParent().repaint();
+		revalidate();
+		repaint();
 	}
 }

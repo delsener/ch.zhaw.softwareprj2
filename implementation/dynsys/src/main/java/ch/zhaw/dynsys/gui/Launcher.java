@@ -11,6 +11,7 @@ import ch.zhaw.dynsys.persistence.LoadFromFileListener;
 import ch.zhaw.dynsys.persistence.LoadFromPresetsListener;
 import ch.zhaw.dynsys.persistence.SaveListener;
 import ch.zhaw.dynsys.simulation.Culture;
+import ch.zhaw.dynsys.simulation.Simulation;
 
 public class Launcher {
 
@@ -52,24 +53,18 @@ public class Launcher {
 		menubar.addMenuItem("Simulation", "Run/Resume", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				culturesEditor.setVisible(false);
-				SimulationFactory.getInstance().start();
-				statusbar.started();
-			}
-		});
-		menubar.addMenuItem("Simulation", "Pause", new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SimulationFactory.getInstance().stop();
-				culturesEditor.setVisible(true);
-				statusbar.stoped();
+				graphPanel.requestFocus();
+				Simulation simulation = SimulationFactory.newInstance(culturesEditor.getCultures());
+				if (simulation.start()) {
+					culturesEditor.setVisible(false);
+					statusbar.started();
+				}
 			}
 		});
 		menubar.addMenuItem("Simulation", "Stop", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SimulationFactory.getInstance().stop();
-				SimulationFactory.newInstance(culturesEditor.getCultures());
 				culturesEditor.setVisible(true);
 				statusbar.stoped();
 			}

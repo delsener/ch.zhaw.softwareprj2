@@ -1,5 +1,6 @@
 package ch.zhaw.dynsys.simulation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.jexl2.JexlException;
@@ -14,32 +15,30 @@ public class Simulation {
 	private Thread thread = null;
 
 	public Simulation(List<Culture> cultures, Listener listener) {
-		this.cultures = cultures;
+		this.cultures = new ArrayList<Culture>();
 		this.listener = listener;
+		
+		for (Culture culture : cultures) {
+			if (culture.isValid()) {
+				this.cultures.add(culture);
+				culture.setValue(culture.getPopulation());
+			}
+		}
+		listener.start(this.cultures);
 	}
 
-	public void start() {
+	public boolean start() {
 		if (cultures.size() == 0) {
-			return;
-		}
-
-		for (Culture culture : cultures) {
-			if (!culture.isValid()) {
-				return;
-			}
-			culture.setValue(culture.getPopulation());
-		}
-
-		synchronized (lock) {
-			if (running) {
-				return;
-			}
+			return false;
 		}
 		
-		final double iteration = 0.01;
-		if (thread == null) {		
-			listener.start(cultures);
+		try {
+			ExpressionUtil.evaluateExpressions(this.cultures, 1);
+		} catch (Exception e) {
+			return false;
 		}
+		
+		final double iteration = 0.001;
 
 		running = true;
 
@@ -60,7 +59,7 @@ public class Simulation {
 					}
 
 					try {
-						Thread.sleep(60);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						// do nothing
 					}
@@ -73,6 +72,7 @@ public class Simulation {
 		});
 
 		thread.start();
+		return true;
 	}
 
 	public void stop() {

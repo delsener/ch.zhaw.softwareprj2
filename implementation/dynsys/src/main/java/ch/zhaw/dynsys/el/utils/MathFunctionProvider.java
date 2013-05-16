@@ -37,4 +37,7 @@ public class MathFunctionProvider {
         return random.nextDouble();
     }
 	
+	public double eva(double c, double a, double b) {
+        return c > 0 ? a : b;
+    }
 }

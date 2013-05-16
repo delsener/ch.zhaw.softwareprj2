@@ -4,6 +4,17 @@ import ch.zhaw.dynsys.simulation.Culture;
 
 public enum SystemConfigurations {
 
+	KINETICT_AFTER_MONOD_SYSTEM("Kinetik nach Monod", new Culture[] {
+			new Culture("Hefe",	"1 * h * (z / (2+z))", 1),
+			new Culture("Zucker", "z > 0 ? -1 * h -0.2 * h' : 0", 100) }),
+			//new Culture("Zucker", "eva(z, -1 * h -0.2 * h', 0)", 400) }),
+			//new Culture("Zucker", "max(z, 0) * c * h + .0.2 * h', 0)", 400) }),
+	
+	ELECTROMAGNETIC_SYSTEM2("Elektromagnestische Schwingkreise", new Culture[] {
+			new Culture("i Strom", "10 / 0.1 - q / (0.000001 * 0.1) - 30 * i / 0.1", 0),
+			new Culture("q Ladung", "i", 0)/*,
+			new Culture("t", "1", 0),*/ }),
+	
 	BARM_SUGAR_SYSTEM("Hefe-Zucker System", new Culture[] {
 			new Culture("Temperatur (C°)", "-10 + 10 * h'", 0),
 			new Culture("Hefe",	"0.0001 * h * z * (40 - abs(30 - t))", 100),

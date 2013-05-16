@@ -62,8 +62,7 @@ public class LoadFromFileListener implements ActionListener {
 
 		SimulationFactory.getInstance().stop();
 		
-		settingsPanel.removeAll();
-		settingsPanel.addAll(cultures);
+		settingsPanel.set(cultures);
 		settingsPanel.setVisible(true);
 		
 		SimulationFactory.newInstance(cultures);

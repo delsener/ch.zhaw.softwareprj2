@@ -47,8 +47,7 @@ public class LoadFromPresetsListener implements ActionListener {
 		SimulationFactory.getInstance().stop();
 		
 		List<Culture> cultures = Arrays.asList(SystemConfigurations.getByName(result).getCultures());
-		settingsPanel.removeAll();
-		settingsPanel.addAll(cultures);
+		settingsPanel.set(cultures);
 		settingsPanel.setVisible(true);
 		
 		SimulationFactory.newInstance(cultures);
