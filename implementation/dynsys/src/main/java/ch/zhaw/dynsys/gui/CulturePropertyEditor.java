@@ -3,11 +3,9 @@ package ch.zhaw.dynsys.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,14 +18,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import ch.zhaw.dynsys.el.utils.ExpressionUtil;
 import ch.zhaw.dynsys.simulation.Culture;
-import ch.zhaw.dynsys.simulation.Simulation;
 
 public class CulturePropertyEditor extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private CultureEditor editor;
 	private Culture culture;
 
-	public CulturePropertyEditor(final Culture culture) {
+	public CulturePropertyEditor(final CultureEditor editor, final Culture culture) {
+		this.editor = editor;
 		this.culture = culture;
 
 		setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
@@ -47,20 +46,11 @@ public class CulturePropertyEditor extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				CultureEditor editor = CulturePropertyEditor.this.editor;
+				editor.remove(CulturePropertyEditor.this);
 				addLastOne();
-				
-				Component button = (Component) e.getSource();
-				Component propertyEditor = button.getParent();
-				Container cultureEditor = (Container)propertyEditor.getParent();
-				
-				Simulation simulation = SimulationFactory.getInstance();
-				List<Culture> cultures = simulation.getCultures();
-				cultures.remove(CulturePropertyEditor.this.culture);
-				SimulationFactory.newInstance(cultures);
+				SimulationFactory.newInstance(editor.getCultures());
 
-				cultureEditor.remove(propertyEditor);
-				cultureEditor.revalidate();
-				cultureEditor.repaint();
 				
 			}
 		});
@@ -91,8 +81,8 @@ public class CulturePropertyEditor extends JPanel {
 					public boolean validate(String value) {
 						addLastOne();
 						try {
-							ExpressionUtil.evaluateExpressions(SimulationFactory.getInstance().getCultures(), 1);
 							culture.setExpression(value);
+							ExpressionUtil.evaluateExpressions(editor.getCultures(), 1);
 							return true;
 						} catch (Exception e) {
 							return false;
@@ -130,14 +120,10 @@ public class CulturePropertyEditor extends JPanel {
 	
 	
 	private void addLastOne() {
-		Container container = (Container)getParent();
-		
-		if (container.getComponent(container.getComponentCount() - 1) != this) {
+		if (editor.getComponent(editor.getComponentCount() - 1) != this) {
 			return;
 		}
 		
-		container.add(new CulturePropertyEditor(new Culture()));
-		container.revalidate();
-		container.repaint();
+		editor.add(new CulturePropertyEditor(editor, new Culture()));
 	}
 }

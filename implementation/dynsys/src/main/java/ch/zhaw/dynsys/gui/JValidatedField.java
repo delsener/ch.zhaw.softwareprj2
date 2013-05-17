@@ -67,12 +67,12 @@ public class JValidatedField extends JTextField implements FocusListener {
 		}
 		
 		
-		if (!validator.validate(getText())) {
+		if (validator.validate(getText())) {
+			setBackground(FIELD_VALID_COLOR);
+		} else {
 			setBackground(FIELD_INVALID_COLOR);
-			return;
 		}
-		
-		setBackground(FIELD_VALID_COLOR);
+
 		currentValue = getText();
 	}
 	

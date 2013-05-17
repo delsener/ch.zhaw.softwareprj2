@@ -32,10 +32,15 @@ public class CultureEditor extends JScrollPane {
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	}
+	
+	public void remove(CulturePropertyEditor propEditor) {
+		cultures.remove(propEditor.getCulture());
+		panel.remove(propEditor);
+	}
 
 	public void add(Culture culture) {
 		cultures.add(culture);
-		panel.add(new CulturePropertyEditor(culture));
+		panel.add(new CulturePropertyEditor(this, culture));
 
 	}
 
