@@ -5,29 +5,25 @@ import ch.zhaw.dynsys.simulation.Culture;
 public enum SystemConfigurations {
 
 	KINETICT_AFTER_MONOD_SYSTEM("Kinetik nach Monod", new Culture[] {
-			new Culture("Hefe",	"1 * h * (z / (2+z))", 1),
-			new Culture("Zucker", "z > 0 ? -1 * h -0.2 * h' : 0", 100) }),
-			//new Culture("Zucker", "eva(z, -1 * h -0.2 * h', 0)", 400) }),
-			//new Culture("Zucker", "max(z, 0) * c * h + .0.2 * h', 0)", 400) }),
-	
-	ELECTROMAGNETIC_SYSTEM2("Elektromagnestische Schwingkreise", new Culture[] {
-			new Culture("i Strom", "10 / 0.1 - q / (0.000001 * 0.1) - 30 * i / 0.1", 0),
-			new Culture("q Ladung", "i", 0)/*,
-			new Culture("t", "1", 0),*/ }),
-	
-	BARM_SUGAR_SYSTEM("Hefe-Zucker System", new Culture[] {
-			new Culture("Temperatur (C°)", "-10 + 10 * h'", 0),
-			new Culture("Hefe",	"0.0001 * h * z * (40 - abs(30 - t))", 100),
-			new Culture("Zucker", "2*h'", 400) }),
-
-	RABBIT_FOX_SYSTEM("Hasen-Fuchs System", new Culture[] {
-			new Culture("Karroten", "20 - 0.2 * h", 50),
-			new Culture("Hasen", "-1 - 1 * f + 1 * k", 100),
-			new Culture("Füchse", "-100 + 1 * h", 10) }),
+			new Culture("a", "0", 1),
+			new Culture("b", "0", 1),
+			new Culture("c", "0", 0),
+			new Culture("d", "0", -0.2),
+			new Culture("H Hefe",	"a * H * (Z / (b+Z))", 1),
+			new Culture("Z Zucker", "Z > 0 ? c * H + d * H' : 0", 1) }),
+			
+	RABBIT_FOX_SYSTEM("Hase-Fuchs-System", new Culture[] {
+			new Culture("K Karroten", "20 - 0.2 * h", 50),
+			new Culture("H Hasen", "-1 - 1 * f + 1 * k", 100),
+			new Culture("F Füchse", "-100 + 1 * h", 10) }),
 	
 	ELECTROMAGNETIC_SYSTEM("Elektromagnestische Schwingkreise", new Culture[] {
-			new Culture("H", "-f", 100),
-			new Culture("F", "h", 1) });
+			new Culture("C", "0", 0.000001),
+			new Culture("L", "0", 0.1),
+			new Culture("R", "0", 30),
+			new Culture("U", "0", 0.00000000000000001),
+			new Culture("I Strom", "U / L - Q / (C * L) - R * I / L", 0),
+			new Culture("Q Ladung", "I", 0)});
 
 	private String name;
 	private Culture[] cultures;

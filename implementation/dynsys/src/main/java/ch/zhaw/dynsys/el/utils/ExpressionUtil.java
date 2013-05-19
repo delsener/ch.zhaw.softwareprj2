@@ -45,17 +45,17 @@ public class ExpressionUtil {
 		// put all expressions in one string
 		StringBuilder expressionString = new StringBuilder();
 		for (Culture culture : cultures) {
-			expressionString.append("var " + culture.getVariable() + " = " + culture.getValue() + "\n");
-			expressionString.append("var " + culture.getVariable() + "_diff = " + culture.getGrowRate() + "\n");
+			expressionString.append("var " + culture.getVariable().toLowerCase() + " = " + culture.getValue() + "\n");
+			expressionString.append("var " + culture.getVariable().toLowerCase() + "_diff = " + culture.getGrowRate() + "\n");
 		}
 		
 		// to get all values as result, put them in a map an return it 
-		expressionString.append("return [");
+		expressionString.append("return [\n");
 		for (Culture culture : cultures) {
 			String exp = culture.getExpression().toLowerCase();
 			exp = exp.replaceAll("([a-z]+)'", "$1_diff"); // replace derivation '
 			exp = exp.replaceAll("([a-z]+)\\(", "math:$1\\("); // add math: namespace
-			expressionString.append("new(\"java.lang.Double\"," + exp + "), ");
+			expressionString.append("\tnew(\"java.lang.Double\"," + exp + "),\n");
 		}
 		expressionString.delete(expressionString.length() -2, expressionString.length());
 		expressionString.append("];");

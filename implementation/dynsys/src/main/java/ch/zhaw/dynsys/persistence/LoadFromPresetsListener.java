@@ -38,7 +38,7 @@ public class LoadFromPresetsListener implements ActionListener {
 				"Select one of the preset system configurations",
 				"Load preset configuration", JOptionPane.INFORMATION_MESSAGE,
 				null, SystemConfigurations.names(),
-				SystemConfigurations.BARM_SUGAR_SYSTEM.getName());
+				SystemConfigurations.KINETICT_AFTER_MONOD_SYSTEM.getName());
 
 		if (result == null) {
 			return;

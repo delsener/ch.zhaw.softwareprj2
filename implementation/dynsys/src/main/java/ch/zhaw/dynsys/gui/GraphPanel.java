@@ -17,7 +17,6 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.plot.DefaultDrawingSupplier;
 import org.jfree.chart.plot.SeriesRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
@@ -58,13 +57,6 @@ public class GraphPanel extends ChartPanel implements
 
 		// plot
 		plot = (XYPlot) chart.getPlot();
-
-		// colors
-		plot.setDrawingSupplier(new DefaultDrawingSupplier(COLOR_SEQUENCE,
-				DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE,
-				DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE,
-				DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE,
-				DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
 
 		plot.setSeriesRenderingOrder(SeriesRenderingOrder.FORWARD);
 		plot.setBackgroundPaint(Color.white);
@@ -113,6 +105,7 @@ public class GraphPanel extends ChartPanel implements
 					serie.add(iteration, culture.getValue());
 					datasets.addSeries(serie);
 					plot.getRenderer().setSeriesStroke(i, new BasicStroke(2.0f));
+					plot.getRenderer().setSeriesPaint(i, COLOR_SEQUENCE[i]);
 					plot.getRenderer().setSeriesVisible(i, culture.getExpression() != null && !"0".equals(culture.getExpression().trim()));
 				}
 				
