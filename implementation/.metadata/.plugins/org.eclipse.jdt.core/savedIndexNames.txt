@@ -2,7 +2,6 @@ INDEX VERSION 1.126+F:\development\zhaw\ch.zhaw.softwareprj2\implementation\.met
 2793267240.index
 1776201594.index
 1128114483.index
-2751539023.index
 1787174850.index
 3328314506.index
 1021380388.index
