@@ -3,7 +3,6 @@ package ch.zhaw.dynsys.persistence;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -12,7 +11,7 @@ import ch.zhaw.dynsys.gui.CultureEditor;
 import ch.zhaw.dynsys.gui.Legend;
 import ch.zhaw.dynsys.gui.MessageHandler;
 import ch.zhaw.dynsys.gui.SimulationFactory;
-import ch.zhaw.dynsys.simulation.Culture;
+import ch.zhaw.dynsys.gui.models.Configuration;
 
 /**
  * Listener for the load action to load cultures from a file.
@@ -43,7 +42,8 @@ public class LoadFromFileListener implements ActionListener {
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setName("Choose a .dynsys file to load the cultures from:");
 		fileChooser.addChoosableFileFilter(fileFilter);
-		fileChooser.setSelectedFile(new File(System.getProperty("user.home")));
+		fileChooser.setSelectedFile(new File(System.getProperty("user.home")
+				+ "/*"));
 
 		int result = fileChooser.showOpenDialog(null);
 
@@ -52,21 +52,21 @@ public class LoadFromFileListener implements ActionListener {
 		}
 
 		File sourceFile = fileChooser.getSelectedFile();
-		List<Culture> cultures = CulturePersistenceUtil
+		Configuration configuration = ConfigurationPersistenceUtil
 				.loadCultures(sourceFile);
-		if (cultures == null || cultures.size() == 0) {
+		if (configuration == null) {
 			MessageHandler
-					.displayWarningMessage("The referenced filed dind't contain any culture!");
+					.displayWarningMessage("The referenced filed dind't contain any configuration!");
 			return;
 		}
 
 		SimulationFactory.getInstance().stop();
-		
-		settingsPanel.set(cultures);
+
+		settingsPanel.set(configuration);
 		settingsPanel.setVisible(true);
-		
-		SimulationFactory.newInstance(cultures);
-		
+
+		SimulationFactory.newInstance(configuration);
+
 	}
 
 }

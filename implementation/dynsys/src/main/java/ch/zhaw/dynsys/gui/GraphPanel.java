@@ -22,6 +22,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import ch.zhaw.dynsys.gui.models.GraphProperty;
 import ch.zhaw.dynsys.simulation.Culture;
 
 public class GraphPanel extends ChartPanel implements
@@ -38,11 +39,11 @@ public class GraphPanel extends ChartPanel implements
 	private JFreeChart chart;
 	private XYPlot plot;
 	private ValueAxis domainAxis;
-	
+
 	private List<Culture> cultures;
 
 	private double iteration = 0;
-	
+
 	private Legend legend;
 
 	public GraphPanel() {
@@ -70,10 +71,9 @@ public class GraphPanel extends ChartPanel implements
 		domainAxis = (ValueAxis) plot.getDomainAxis();
 		domainAxis.setVisible(false);
 
-
 		setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
 		setChart(chart);
-		
+
 		setViewAll(false);
 	}
 
@@ -90,29 +90,34 @@ public class GraphPanel extends ChartPanel implements
 		iteration = 0;
 	}
 
-
 	@Override
 	public void start(final List<Culture> cultures) {
 		this.cultures = cultures;
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				clear();
-				
+
 				for (int i = 0; i < cultures.size(); i++) {
 					Culture culture = cultures.get(i);
 					XYSeries serie = new XYSeries(culture.getName());
 					serie.add(iteration, culture.getValue());
 					datasets.addSeries(serie);
-					plot.getRenderer().setSeriesStroke(i, new BasicStroke(2.0f));
+					plot.getRenderer()
+							.setSeriesStroke(i, new BasicStroke(2.0f));
 					plot.getRenderer().setSeriesPaint(i, COLOR_SEQUENCE[i]);
-					plot.getRenderer().setSeriesVisible(i, culture.getExpression() != null && !"0".equals(culture.getExpression().trim()));
+					plot.getRenderer().setSeriesVisible(
+							i,
+							culture.getExpression() != null
+									&& !"0".equals(culture.getExpression()
+											.trim()));
 				}
-				
-				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(GraphPanel.this);
-				Container glassPane = (Container)frame.getGlassPane();
+
+				JFrame frame = (JFrame) SwingUtilities
+						.getWindowAncestor(GraphPanel.this);
+				Container glassPane = (Container) frame.getGlassPane();
 				glassPane.removeAll();
-				
+
 				legend = new Legend(GraphPanel.this.cultures);
 				SpringLayout springLayout = new SpringLayout();
 				glassPane.setLayout(springLayout);
@@ -126,14 +131,14 @@ public class GraphPanel extends ChartPanel implements
 				// update chart
 				revalidate();
 				repaint();
-				
+
 				iteration++;
 			}
 		});
 	}
 
 	@Override
-	public void updated() {		
+	public void updated() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				for (int i = 0; i < cultures.size(); i++) {
@@ -141,15 +146,21 @@ public class GraphPanel extends ChartPanel implements
 					XYSeries dataset = datasets.getSeries(i);
 					dataset.add(iteration, culture.getValue());
 				}
-				
+
 				legend.update();
 
 				// update chart
 				revalidate();
 				repaint();
-				
+
 				iteration++;
 			}
 		});
+	}
+
+	public void configure(GraphProperty graphProperty) {
+		ValueAxis rangeAxis = plot.getRangeAxis(); // y-Axis
+		rangeAxis.setRange(graphProperty.getRangeAxisFrom(),
+				graphProperty.getRangeAxisTo());
 	}
 }

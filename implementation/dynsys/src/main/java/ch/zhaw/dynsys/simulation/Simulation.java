@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.jexl2.JexlException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import ch.zhaw.dynsys.el.utils.ExpressionUtil;
 
@@ -20,7 +19,7 @@ public class Simulation {
 	public Simulation(List<Culture> cultures, Listener listener) {
 		this.cultures = new ArrayList<Culture>();
 		this.listener = listener;
-		
+
 		for (Culture culture : cultures) {
 			if (culture.isValid()) {
 				this.cultures.add(culture);
@@ -34,15 +33,16 @@ public class Simulation {
 		if (cultures.size() == 0) {
 			return false;
 		}
-		
+
 		try {
 			ExpressionUtil.evaluateExpressions(this.cultures, 1);
 		} catch (Exception e) {
 			String message = e.getMessage().replace(";", ";\n");
-			JOptionPane.showMessageDialog(null, message, "Expression Language Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, message,
+					"Expression Language Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		
+
 		final double iteration = 0.01;
 
 		running = true;
@@ -103,6 +103,7 @@ public class Simulation {
 
 	public static interface Listener {
 		public void start(List<Culture> cultures);
+
 		public void updated();
 	}
 
@@ -110,5 +111,4 @@ public class Simulation {
 		return cultures;
 	}
 
-	
 }

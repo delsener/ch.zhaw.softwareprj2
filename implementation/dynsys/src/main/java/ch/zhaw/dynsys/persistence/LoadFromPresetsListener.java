@@ -2,15 +2,13 @@ package ch.zhaw.dynsys.persistence;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import ch.zhaw.dynsys.gui.CultureEditor;
 import ch.zhaw.dynsys.gui.Legend;
 import ch.zhaw.dynsys.gui.SimulationFactory;
-import ch.zhaw.dynsys.simulation.Culture;
+import ch.zhaw.dynsys.gui.models.Configuration;
 import ch.zhaw.dynsys.simulation.configs.SystemConfigurations;
 
 /**
@@ -45,11 +43,12 @@ public class LoadFromPresetsListener implements ActionListener {
 		}
 
 		SimulationFactory.getInstance().stop();
-		
-		List<Culture> cultures = Arrays.asList(SystemConfigurations.getByName(result).getCultures());
-		settingsPanel.set(cultures);
+
+		Configuration configuration = SystemConfigurations.getByName(result)
+				.getConfiguration();
+		settingsPanel.set(configuration);
 		settingsPanel.setVisible(true);
-		
-		SimulationFactory.newInstance(cultures);
+
+		SimulationFactory.newInstance(configuration);
 	}
 }
