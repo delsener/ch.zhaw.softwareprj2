@@ -33,7 +33,7 @@ public class CultureEditor extends JScrollPane {
 		viewport.setMaximumSize(d);
 
 		graphPropertyEditor = new GraphPropertyEditor(new GraphProperty(
-				Double.NaN, Double.NaN, Double.NaN));
+				Double.NaN, Double.NaN));
 		panel.add(graphPropertyEditor);
 
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

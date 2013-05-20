@@ -24,7 +24,7 @@ public class Configuration implements Serializable {
 	 *            the cultures.
 	 */
 	public Configuration(List<Culture> cultures) {
-		this.graphProperty = new GraphProperty(-1, -1, -1);
+		this.graphProperty = new GraphProperty(-1, -1);
 		this.cultures = cultures;
 	}
 

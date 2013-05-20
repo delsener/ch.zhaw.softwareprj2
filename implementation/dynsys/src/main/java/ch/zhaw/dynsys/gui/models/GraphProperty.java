@@ -12,7 +12,6 @@ public class GraphProperty implements Serializable {
 
 	private double rangeAxisFrom;
 	private double rangeAxisTo;
-	private double rangeAxisTick;
 
 	/**
 	 * Constructor.
@@ -21,14 +20,10 @@ public class GraphProperty implements Serializable {
 	 *            the minimum value of the range axis.
 	 * @param rangeAxisTo
 	 *            the maximum value of the range axis.
-	 * @param rangeAxisTick
-	 *            the tick rate.
 	 */
-	public GraphProperty(double rangeAxisFrom, double rangeAxisTo,
-			double rangeAxisTick) {
+	public GraphProperty(double rangeAxisFrom, double rangeAxisTo) {
 		this.rangeAxisFrom = rangeAxisFrom;
 		this.rangeAxisTo = rangeAxisTo;
-		this.rangeAxisTick = rangeAxisTick;
 	}
 
 	public double getRangeAxisFrom() {
@@ -39,19 +34,11 @@ public class GraphProperty implements Serializable {
 		return rangeAxisTo;
 	}
 
-	public double getRangeAxisTick() {
-		return rangeAxisTick;
-	}
-
 	public void setRangeAxisFrom(double rangeAxisFrom) {
 		this.rangeAxisFrom = rangeAxisFrom;
 	}
 
 	public void setRangeAxisTo(double rangeAxisTo) {
 		this.rangeAxisTo = rangeAxisTo;
-	}
-
-	public void setRangeAxisTick(double rangeAxisTick) {
-		this.rangeAxisTick = rangeAxisTick;
 	}
 }

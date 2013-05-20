@@ -14,12 +14,16 @@ import ch.zhaw.dynsys.gui.models.Configuration;
 public final class ConfigurationPersistenceUtil {
 
 	public static void saveConfiguration(File file, Configuration configuration) {
+		if (file == null || configuration == null) {
+			return;
+		}
+		
 		checkFile(file);
 		PersistenceUtil.saveObject(file, (Serializable) configuration);
 	}
 
 	public static Configuration loadCultures(File file) {
-		if (!file.exists()) {
+		if (file == null || !file.exists()) {
 			return null;
 		}
 		return (Configuration) PersistenceUtil.loadObject(file);

@@ -21,13 +21,12 @@ public class GraphPropertyEditor extends JPanel {
 
 	private JValidatedField fromField;
 	private JValidatedField toField;
-	private JValidatedField tickField;
 
 	public GraphPropertyEditor(GraphProperty graphProperty) {
 		this.graphProperty = graphProperty;
 
 		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		setMaximumSize(new Dimension(300, 130));
+		setMaximumSize(new Dimension(300, 110));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		setAlignmentY(Component.TOP_ALIGNMENT);
 
@@ -85,33 +84,9 @@ public class GraphPropertyEditor extends JPanel {
 				});
 		items.add(toField);
 
-		// Range Axis Tick
-		tickField = new JValidatedField(50, "Range Axis Tick",
-				Double.isNaN(graphProperty.getRangeAxisTick()) ? null : String
-						.valueOf(graphProperty.getRangeAxisTick()),
-				new JValidatedField.Validator() {
-					@Override
-					public boolean validate(String value) {
-						if (StringUtils.isBlank(value)) {
-							return false;
-						}
-
-						try {
-							double input = Double.parseDouble(value);
-							GraphPropertyEditor.this.graphProperty
-									.setRangeAxisTick(input);
-						} catch (NumberFormatException numberFormatException) {
-							return false;
-						}
-
-						return true;
-					}
-				});
-		items.add(tickField);
-
 		add(items);
 
-		SpringUtilities.makeCompactGrid(items, 4, 1, // rows, cols
+		SpringUtilities.makeCompactGrid(items, 3, 1, // rows, cols
 				6, 6, // initX, initY
 				6, 6);
 	}
