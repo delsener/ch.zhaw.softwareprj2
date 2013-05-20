@@ -16,7 +16,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisLocation;
-import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.SeriesRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
@@ -31,17 +31,15 @@ public class GraphPanel extends ChartPanel implements
 			Color.ORANGE, Color.PINK, Color.GREEN, Color.CYAN, Color.DARK_GRAY,
 			Color.BLACK, Color.YELLOW };
 
-	private static final int LASTEST_TIME_FRAME = 200;
+	private static final int LASTEST_TIME_FRAME = 2;
 	private static final long serialVersionUID = 1L;
 
 	private XYSeriesCollection datasets = new XYSeriesCollection();
 	private JFreeChart chart;
 	private XYPlot plot;
-	private ValueAxis domainAxis;
+	private NumberAxis domainAxis;
 	
 	private List<Culture> cultures;
-
-	private double iteration = 0;
 	
 	private Legend legend;
 
@@ -67,7 +65,8 @@ public class GraphPanel extends ChartPanel implements
 		plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 
 		// domain axis
-		domainAxis = (ValueAxis) plot.getDomainAxis();
+		domainAxis = new NumberAxis();
+		plot.setDomainAxis(domainAxis);
 		domainAxis.setVisible(false);
 
 
@@ -87,7 +86,6 @@ public class GraphPanel extends ChartPanel implements
 
 	public void clear() {
 		datasets.removeAllSeries();
-		iteration = 0;
 	}
 
 
@@ -102,7 +100,6 @@ public class GraphPanel extends ChartPanel implements
 				for (int i = 0; i < cultures.size(); i++) {
 					Culture culture = cultures.get(i);
 					XYSeries serie = new XYSeries(culture.getName());
-					serie.add(iteration, culture.getValue());
 					datasets.addSeries(serie);
 					plot.getRenderer().setSeriesStroke(i, new BasicStroke(2.0f));
 					plot.getRenderer().setSeriesPaint(i, COLOR_SEQUENCE[i]);
@@ -126,29 +123,26 @@ public class GraphPanel extends ChartPanel implements
 				// update chart
 				revalidate();
 				repaint();
-				
-				iteration++;
 			}
 		});
 	}
 
 	@Override
-	public void updated() {		
+	public void updated(final double x, final double[] y) {		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				for (int i = 0; i < cultures.size(); i++) {
-					Culture culture = cultures.get(i);
-					XYSeries dataset = datasets.getSeries(i);
-					dataset.add(iteration, culture.getValue());
+				synchronized (datasets) {
+					for (int i = 0; i < y.length; i++) {
+						XYSeries dataset = datasets.getSeries(i);
+						dataset.add(x, y[i]);
+					}
+					
+					legend.update();
+	
+					// update chart
+					revalidate();
+					repaint();
 				}
-				
-				legend.update();
-
-				// update chart
-				revalidate();
-				repaint();
-				
-				iteration++;
 			}
 		});
 	}
