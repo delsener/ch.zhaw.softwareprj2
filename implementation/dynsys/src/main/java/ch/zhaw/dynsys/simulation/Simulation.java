@@ -21,7 +21,7 @@ public class Simulation {
 	public Simulation(List<Culture> cultures, Listener listener) {
 		this.cultures = new ArrayList<Culture>();
 		this.listener = listener;
-		
+
 		for (Culture culture : cultures) {
 			if (culture.isValid()) {
 				this.cultures.add(culture);
@@ -35,12 +35,13 @@ public class Simulation {
 		if (cultures.size() == 0) {
 			return false;
 		}
-		
+
 		try {
-			ExpressionUtil.evaluateExpressions(this.cultures, 1);
+			ExpressionUtil.evaluateExpressions(this.cultures, ITERATION_STEP);
 		} catch (Exception e) {
 			String message = e.getMessage().replace(";", ";\n");
-			JOptionPane.showMessageDialog(null, message, "Expression Language Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, message,
+					"Expression Language Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
@@ -114,5 +115,4 @@ public class Simulation {
 		return cultures;
 	}
 
-	
 }

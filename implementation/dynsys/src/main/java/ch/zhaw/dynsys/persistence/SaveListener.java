@@ -6,8 +6,8 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import ch.zhaw.dynsys.gui.MessageHandler;
 import ch.zhaw.dynsys.gui.CultureEditor;
+import ch.zhaw.dynsys.gui.MessageHandler;
 
 /**
  * Listener for the save action to display a file chooser dialog and save the
@@ -16,16 +16,16 @@ import ch.zhaw.dynsys.gui.CultureEditor;
 public class SaveListener implements ActionListener {
 
 	private final CultureEditor settingsPanel;
-	
+
 	/**
 	 * Constructor.
 	 * 
-	 * @param settingsPanel the settings panel.
+	 * @param settingsPanel
+	 *            the settings panel.
 	 */
 	public SaveListener(CultureEditor settingsPanel) {
 		this.settingsPanel = settingsPanel;
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -33,17 +33,20 @@ public class SaveListener implements ActionListener {
 		fileChooser.setMultiSelectionEnabled(false);
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setName("Choose a .dynsys file to store the cultures in:");
-		fileChooser.setSelectedFile(new File(System.getProperty("user.home") + "/*.dynsys"));
-		
+		fileChooser.setSelectedFile(new File(System.getProperty("user.home")
+				+ "/*.dynsys"));
+
 		int result = fileChooser.showSaveDialog(null);
-		
+
 		if (JFileChooser.CANCEL_OPTION == result) {
 			return;
 		}
-		
+
 		File destinationFile = fileChooser.getSelectedFile();
-		CulturePersistenceUtil.saveCultures(destinationFile, settingsPanel.getCultures());
-		MessageHandler.displayInfoMessage("Successfully saved the current cultures!");
+		ConfigurationPersistenceUtil.saveConfiguration(destinationFile,
+				settingsPanel.getConfiguration());
+		MessageHandler
+				.displayInfoMessage("Successfully saved the current cultures!");
 	}
 
 }

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import ch.zhaw.dynsys.gui.models.Configuration;
 import ch.zhaw.dynsys.persistence.LoadFromFileListener;
 import ch.zhaw.dynsys.persistence.LoadFromPresetsListener;
 import ch.zhaw.dynsys.persistence.SaveListener;
@@ -54,7 +55,10 @@ public class Launcher {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				graphPanel.requestFocus();
-				Simulation simulation = SimulationFactory.newInstance(culturesEditor.getCultures());
+				Configuration configuration = culturesEditor.getConfiguration();
+				graphPanel.configure(configuration.getGraphProperty());
+				Simulation simulation = SimulationFactory
+						.newInstance(configuration);
 				if (simulation.start()) {
 					culturesEditor.setVisible(false);
 					statusbar.started();

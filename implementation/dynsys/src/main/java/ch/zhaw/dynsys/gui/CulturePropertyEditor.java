@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
@@ -25,7 +26,8 @@ public class CulturePropertyEditor extends JPanel {
 	private CultureEditor editor;
 	private Culture culture;
 
-	public CulturePropertyEditor(final CultureEditor editor, final Culture culture) {
+	public CulturePropertyEditor(final CultureEditor editor,
+			final Culture culture) {
 		this.editor = editor;
 		this.culture = culture;
 
@@ -43,20 +45,23 @@ public class CulturePropertyEditor extends JPanel {
 		close.setPreferredSize(new Dimension(10, 10));
 		close.setContentAreaFilled(false);
 		close.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CultureEditor editor = CulturePropertyEditor.this.editor;
 				editor.remove(CulturePropertyEditor.this);
 				addLastOne();
-				SimulationFactory.newInstance(editor.getCultures());
+				SimulationFactory.newInstance(editor.getConfiguration());
 
-				
 			}
 		});
 		add(close, BorderLayout.NORTH);
 
 		JPanel items = new JPanel(new SpringLayout());
+
+		if (editor.getComponent(0) == this) {
+			items.add(new JLabel("Cultures and Variables"));
+		}
 
 		// name label
 		items.add(new JValidatedField(50, "Name", culture.getName(),
@@ -64,7 +69,7 @@ public class CulturePropertyEditor extends JPanel {
 					@Override
 					public boolean validate(String value) {
 						addLastOne();
-						
+
 						if (StringUtils.isBlank(value)) {
 							return false;
 						}
@@ -82,7 +87,8 @@ public class CulturePropertyEditor extends JPanel {
 						addLastOne();
 						try {
 							culture.setExpression(value);
-							ExpressionUtil.evaluateExpressions(editor.getCultures(), 1);
+							ExpressionUtil.evaluateExpressions(editor
+									.getConfiguration().getCultures(), 1);
 							return true;
 						} catch (Exception e) {
 							return false;
@@ -97,7 +103,7 @@ public class CulturePropertyEditor extends JPanel {
 			@Override
 			public boolean validate(String value) {
 				addLastOne();
-				
+
 				try {
 					culture.setPopulation(Double.parseDouble(value));
 					return true;
@@ -117,13 +123,12 @@ public class CulturePropertyEditor extends JPanel {
 	public Culture getCulture() {
 		return culture;
 	}
-	
-	
+
 	private void addLastOne() {
 		if (editor.getComponent(editor.getComponentCount() - 1) != this) {
 			return;
 		}
-		
+
 		editor.add(new CulturePropertyEditor(editor, new Culture()));
 	}
 }
