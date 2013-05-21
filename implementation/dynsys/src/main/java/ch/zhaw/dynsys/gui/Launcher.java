@@ -1,6 +1,9 @@
 package ch.zhaw.dynsys.gui;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import ch.zhaw.dynsys.gui.models.Configuration;
+import ch.zhaw.dynsys.gui.models.GraphProperty;
 import ch.zhaw.dynsys.persistence.LoadFromFileListener;
 import ch.zhaw.dynsys.persistence.LoadFromPresetsListener;
 import ch.zhaw.dynsys.persistence.SaveListener;
@@ -26,11 +30,15 @@ public class Launcher {
 		// instance gui
 		final GraphPanel graphPanel = new GraphPanel();
 		SimulationFactory.setListener(graphPanel);
-		final CultureEditor culturesEditor = new CultureEditor();
+		final GraphPropertyEditor graphPropertyEditor = new GraphPropertyEditor(
+				graphPanel, new GraphProperty(0, 100));
+		final CultureEditor culturesEditor = new CultureEditor(
+				graphPropertyEditor);
 		final Statusbar statusbar = new Statusbar();
 
 		// setup listeners
 		Menubar menubar = new Menubar();
+		menubar.setLayout(new GridBagLayout());
 
 		// menu items
 		menubar.addMenuItem("File", "Open..", new LoadFromFileListener(
@@ -55,7 +63,6 @@ public class Launcher {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Configuration configuration = culturesEditor.getConfiguration();
-				graphPanel.configure(configuration.getGraphProperty());
 				Simulation simulation = SimulationFactory
 						.newInstance(configuration);
 				if (simulation.start()) {
@@ -81,6 +88,13 @@ public class Launcher {
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.anchor = GridBagConstraints.EAST;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.weightx = 1.0;
+		constraints.insets = new Insets(0, 0, 0, 90);
+		menubar.add(graphPropertyEditor, constraints);
 
 		// add simulation to menubar
 		frame.setJMenuBar(menubar);

@@ -9,19 +9,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import ch.zhaw.dynsys.gui.models.Configuration;
-import ch.zhaw.dynsys.gui.models.GraphProperty;
 import ch.zhaw.dynsys.simulation.Culture;
 
 public class CultureEditor extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel panel;
-	private GraphPropertyEditor graphPropertyEditor;
+	private final GraphPropertyEditor graphPropertyEditor;
 	private List<Culture> cultures;
 
-	public CultureEditor() {
+	public CultureEditor(GraphPropertyEditor graphPropertyEditor) {
 		this.panel = new JPanel();
 		this.cultures = new ArrayList<Culture>();
+		this.graphPropertyEditor = graphPropertyEditor;
 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
@@ -31,10 +31,6 @@ public class CultureEditor extends JScrollPane {
 		viewport.add(panel);
 		viewport.setPreferredSize(d);
 		viewport.setMaximumSize(d);
-
-		graphPropertyEditor = new GraphPropertyEditor(new GraphProperty(
-				Double.NaN, Double.NaN));
-		panel.add(graphPropertyEditor);
 
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -54,9 +50,7 @@ public class CultureEditor extends JScrollPane {
 	public void set(Configuration configuration) {
 		panel.removeAll();
 
-		graphPropertyEditor = new GraphPropertyEditor(
-				configuration.getGraphProperty());
-		panel.add(graphPropertyEditor);
+		graphPropertyEditor.setGraphProperty(configuration.getGraphProperty());
 
 		List<Culture> cultures = configuration.getCultures();
 		this.cultures.clear();
