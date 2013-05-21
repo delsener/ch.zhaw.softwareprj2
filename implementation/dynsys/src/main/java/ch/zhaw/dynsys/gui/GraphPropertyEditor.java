@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import ch.zhaw.dynsys.gui.models.GraphProperty;
 
@@ -26,7 +27,7 @@ public class GraphPropertyEditor extends JPanel {
 		this.graphProperty = graphProperty;
 
 		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		setMaximumSize(new Dimension(300, 110));
+		setMaximumSize(new Dimension(300, SystemUtils.IS_OS_MAC_OSX ? 110 : 80));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		setAlignmentY(Component.TOP_ALIGNMENT);
 

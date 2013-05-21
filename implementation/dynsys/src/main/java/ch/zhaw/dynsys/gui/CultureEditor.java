@@ -76,7 +76,7 @@ public class CultureEditor extends JScrollPane {
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		getParent().revalidate();
+		// getParent().revalidate();
 		getParent().repaint();
 		revalidate();
 		repaint();

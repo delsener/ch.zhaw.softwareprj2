@@ -26,7 +26,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 import ch.zhaw.dynsys.gui.models.GraphProperty;
 import ch.zhaw.dynsys.simulation.Culture;
 
-public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.Simulation.Listener {
+public class GraphPanel extends ChartPanel implements
+		ch.zhaw.dynsys.simulation.Simulation.Listener {
 
 	public static Color[] COLOR_SEQUENCE = new Color[] { Color.RED, Color.BLUE,
 			Color.ORANGE, Color.PINK, Color.GREEN, Color.CYAN, Color.DARK_GRAY,
@@ -38,9 +39,9 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 	private XYSeriesCollection datasets = new XYSeriesCollection();
 	private JFreeChart chart;
 	private XYPlot plot;
-	
+
 	private NumberAxis domainAxis;
-	
+
 	private List<Culture> cultures;
 	private Legend legend;
 
@@ -133,7 +134,7 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 	}
 
 	@Override
-	public void updated(final double x, final double[] y) {		
+	public void updated(final double x, final double[] y) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				synchronized (datasets) {
@@ -141,14 +142,14 @@ public class GraphPanel extends ChartPanel implements ch.zhaw.dynsys.simulation.
 						XYSeries dataset = datasets.getSeries(i);
 						dataset.add(x, y[i]);
 					}
-					
+
 					legend.update();
-	
+
 					// update chart
 					revalidate();
 					repaint();
 				}
-				
+
 				legend.update();
 
 				// update chart

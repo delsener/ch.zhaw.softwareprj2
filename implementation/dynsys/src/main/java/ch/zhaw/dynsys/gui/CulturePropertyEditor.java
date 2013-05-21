@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import ch.zhaw.dynsys.el.utils.ExpressionUtil;
 import ch.zhaw.dynsys.simulation.Culture;
@@ -32,7 +33,7 @@ public class CulturePropertyEditor extends JPanel {
 		this.culture = culture;
 
 		setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
-		setMaximumSize(new Dimension(300, 100));
+		setMaximumSize(new Dimension(300, SystemUtils.IS_OS_MAC_OSX ? 130 : 100));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		setAlignmentY(Component.TOP_ALIGNMENT);
 
