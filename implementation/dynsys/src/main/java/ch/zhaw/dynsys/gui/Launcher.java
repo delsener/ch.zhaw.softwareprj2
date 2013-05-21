@@ -54,7 +54,6 @@ public class Launcher {
 		menubar.addMenuItem("Simulation", "Run/Resume", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				graphPanel.requestFocus();
 				Configuration configuration = culturesEditor.getConfiguration();
 				graphPanel.configure(configuration.getGraphProperty());
 				Simulation simulation = SimulationFactory
@@ -94,5 +93,8 @@ public class Launcher {
 		// show
 		frame.pack();
 		frame.setVisible(true);
+
+		// set focus on graph panel
+		graphPanel.grabFocus();
 	}
 }

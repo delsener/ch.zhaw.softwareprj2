@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
@@ -33,7 +32,7 @@ public class CulturePropertyEditor extends JPanel {
 		this.culture = culture;
 
 		setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
-		setMaximumSize(new Dimension(300, SystemUtils.IS_OS_MAC_OSX ? 130 : 100));
+		setMaximumSize(new Dimension(300, SystemUtils.IS_OS_MAC_OSX ? 90 : 65));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		setAlignmentY(Component.TOP_ALIGNMENT);
 
@@ -60,12 +59,10 @@ public class CulturePropertyEditor extends JPanel {
 
 		JPanel items = new JPanel(new SpringLayout());
 
-		if (editor.getComponent(0) == this) {
-			items.add(new JLabel("Cultures and Variables"));
-		}
+		JPanel columns = new JPanel(new SpringLayout());
 
 		// name label
-		items.add(new JValidatedField(50, "Name", culture.getName(),
+		columns.add(new JValidatedField(70, "Name", culture.getName(),
 				new JValidatedField.Validator() {
 					@Override
 					public boolean validate(String value) {
@@ -80,25 +77,8 @@ public class CulturePropertyEditor extends JPanel {
 					}
 				}));
 
-		// quantity
-		items.add(new JValidatedField(50, "Function", culture.getExpression(),
-				new JValidatedField.Validator() {
-					@Override
-					public boolean validate(String value) {
-						addLastOne();
-						try {
-							culture.setExpression(value);
-							ExpressionUtil.evaluateExpressions(editor
-									.getConfiguration().getCultures(), 1);
-							return true;
-						} catch (Exception e) {
-							return false;
-						}
-					}
-				}));
-
-		// expression
-		items.add(new JValidatedField(50, "Start value", Double.isNaN(culture
+		// start value
+		columns.add(new JValidatedField(30, "Start value", Double.isNaN(culture
 				.getPopulation()) ? null : String.valueOf(culture
 				.getPopulation()), new JValidatedField.Validator() {
 			@Override
@@ -113,12 +93,35 @@ public class CulturePropertyEditor extends JPanel {
 				}
 			}
 		}));
+		items.add(columns);
 
-		add(items);
+		// expression
+		JValidatedField expressionField = new JValidatedField(50, "Function",
+				culture.getExpression(), new JValidatedField.Validator() {
+					@Override
+					public boolean validate(String value) {
+						addLastOne();
+						try {
+							culture.setExpression(value);
+							ExpressionUtil.evaluateExpressions(editor
+									.getConfiguration().getCultures(), 1);
+							return true;
+						} catch (Exception e) {
+							return false;
+						}
+					}
+				});
+		items.add(expressionField);
 
-		SpringUtilities.makeCompactGrid(items, 3, 1, // rows, cols
+		SpringUtilities.makeCompactGrid(columns, 1, 2, // rows, cols
+				0, 0, // initX, initY
+				0, 0);
+
+		SpringUtilities.makeCompactGrid(items, 2, 1, // rows, cols
 				6, 6, // initX, initY
 				6, 6);
+
+		add(items);
 	}
 
 	public Culture getCulture() {

@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
@@ -27,15 +26,13 @@ public class GraphPropertyEditor extends JPanel {
 		this.graphProperty = graphProperty;
 
 		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		setMaximumSize(new Dimension(300, SystemUtils.IS_OS_MAC_OSX ? 110 : 80));
+		setMaximumSize(new Dimension(300, SystemUtils.IS_OS_MAC_OSX ? 60 : 30));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 		setAlignmentY(Component.TOP_ALIGNMENT);
 
 		setLayout(new BorderLayout());
 
 		JPanel items = new JPanel(new SpringLayout());
-
-		items.add(new JLabel("Graph Settings"));
 
 		// Range Axis From
 		fromField = new JValidatedField(50, "Range Axis From",
@@ -87,7 +84,7 @@ public class GraphPropertyEditor extends JPanel {
 
 		add(items);
 
-		SpringUtilities.makeCompactGrid(items, 3, 1, // rows, cols
+		SpringUtilities.makeCompactGrid(items, 1, 2, // rows, cols
 				6, 6, // initX, initY
 				6, 6);
 	}
