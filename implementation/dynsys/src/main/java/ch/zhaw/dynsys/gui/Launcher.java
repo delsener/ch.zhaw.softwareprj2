@@ -27,8 +27,8 @@ public class Launcher {
 		final JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Numeric Differential Equation Solver for Advanced Biological Dynamic Systems");
-		frame.setIconImage(new ImageIcon("src/main/resources/carrot.png")
-				.getImage());
+		frame.setIconImage(new ImageIcon(Launcher.class.getClassLoader()
+				.getResource("carrot.png")).getImage());
 
 		// instance gui
 		final GraphPanel graphPanel = new GraphPanel();
