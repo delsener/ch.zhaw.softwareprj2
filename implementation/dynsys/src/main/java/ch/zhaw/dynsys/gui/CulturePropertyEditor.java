@@ -107,6 +107,7 @@ public class CulturePropertyEditor extends JPanel {
 									.getConfiguration().getCultures(), 1);
 							return true;
 						} catch (Exception e) {
+							e.printStackTrace();
 							return false;
 						}
 					}

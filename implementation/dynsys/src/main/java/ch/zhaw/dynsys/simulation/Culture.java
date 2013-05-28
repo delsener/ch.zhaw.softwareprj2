@@ -43,7 +43,7 @@ public class Culture implements Serializable {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-		return name.split(" ")[0];
+		return name.split(" ")[0].toLowerCase();
 	}
 
 	public String getExpression() {

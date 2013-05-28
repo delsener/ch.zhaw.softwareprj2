@@ -1,26 +1,26 @@
 what,kind,bundleId,bundleVersion,description,time
-processors,sysinfo,,,"4",1369723817095
-java.runtime.name,sysinfo,,,"Java(TM) SE Runtime Environment",1369723817095
-java.runtime.version,sysinfo,,,"1.7.0-b147",1369723817095
-java.specification.name,sysinfo,,,"Java Platform API Specification",1369723817095
-java.specification.vendor,sysinfo,,,"Oracle Corporation",1369723817095
-java.specification.version,sysinfo,,,"1.7",1369723817095
-java.vendor,sysinfo,,,"Oracle Corporation",1369723817095
-java.version,sysinfo,,,"1.7.0",1369723817095
-java.vm.info,sysinfo,,,"mixed mode",1369723817095
-java.vm.name,sysinfo,,,"Java HotSpot(TM) 64-Bit Server VM",1369723817095
-java.vm.specification.name,sysinfo,,,"Java Virtual Machine Specification",1369723817095
-java.vm.specification.vendor,sysinfo,,,"Oracle Corporation",1369723817095
-java.vm.specification.version,sysinfo,,,"1.7",1369723817095
-java.vm.vendor,sysinfo,,,"Oracle Corporation",1369723817095
-java.vm.version,sysinfo,,,"21.0-b17",1369723817095
-started,bundle,org.eclipse.wb.discovery.ui,1.1.0.r37x201109091028,"org.eclipse.wb.discovery.ui",1369723817731
-started,bundle,org.eclipse.mylyn.team.ui,3.6.1.v20110825-0100,"org.eclipse.mylyn.team.ui",1369723817737
-activated,view,org.eclipse.ui.views,3.6.0.I20110412-0800,"org.eclipse.ui.views.ContentOutline",1369723819546
-closed,editor,org.eclipse.jdt.ui,3.7.0.v20110531-1200,"org.eclipse.jdt.ui.CompilationUnitEditor",1369723819549
-activated,view,org.eclipse.jdt.ui,3.7.0.v20110531-1200,"org.eclipse.jdt.ui.PackageExplorer",1369723821417
-opened,view,org.eclipse.ui.ide,3.7.0.I20110519-0100,"org.eclipse.ui.views.ProblemView",1369723821828
-executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.navigate.collapseAll",1369723821923
-started,bundle,org.eclipse.debug.ui,3.7.0.v20110518,"org.eclipse.debug.ui",1369723822506
-started,bundle,org.eclipse.jdt.debug,3.7.0.v20110509,"org.eclipse.jdt.debug",1369723823663
-started,bundle,org.eclipse.jdt.debug.ui,3.6.0.v20110512,"org.eclipse.jdt.debug.ui",1369723823838
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726345614
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726345911
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726346168
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726346512
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726346752
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726347084
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726347539
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726347914
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1369726348167
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1369726348950
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369726366344
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369726372704
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1369726380605
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1369726384376
+executed,command,org.eclipse.ui.workbench.texteditor,3.7.0.v20110505-0800,"org.eclipse.ui.edit.text.select.lineStart",1369726387027
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369726388106
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369726393609
+executed,command,org.eclipse.ui.workbench.texteditor,3.7.0.v20110505-0800,"org.eclipse.ui.edit.text.select.lineStart",1369726397109
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1369726397631
+started,bundle,org.eclipse.wst.jsdt.manipulation,1.0.300.v201104272153,"org.eclipse.wst.jsdt.manipulation",1369726398642
+started,bundle,org.eclipse.wst.jsdt.ui,1.1.101.v201108151912,"org.eclipse.wst.jsdt.ui",1369726398702
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1369726398890
+executed,command,org.eclipse.jdt.ui,3.7.0.v20110531-1200,"org.eclipse.jdt.ui.edit.text.java.extract.local.variable",1369726398903
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369726400906
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369726403085
