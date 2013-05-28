@@ -44,7 +44,7 @@ public class CultureEditor extends JScrollPane {
 	public void add(Culture culture) {
 		cultures.add(culture);
 		panel.add(new CulturePropertyEditor(this, culture));
-
+		panel.revalidate();
 	}
 
 	public void set(Configuration configuration) {

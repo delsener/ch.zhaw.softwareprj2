@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -25,7 +26,9 @@ public class Launcher {
 		// main frame
 		final JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Populations Dynmaik - dynamisches System");
+		frame.setTitle("Numeric Differential Equation Solver for Advanced Biological Dynamic Systems");
+		frame.setIconImage(new ImageIcon("src/main/resources/carrot.png")
+				.getImage());
 
 		// instance gui
 		final GraphPanel graphPanel = new GraphPanel();

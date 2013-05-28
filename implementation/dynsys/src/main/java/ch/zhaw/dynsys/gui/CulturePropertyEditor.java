@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -107,7 +108,6 @@ public class CulturePropertyEditor extends JPanel {
 									.getConfiguration().getCultures(), 1);
 							return true;
 						} catch (Exception e) {
-							e.printStackTrace();
 							return false;
 						}
 					}
@@ -130,10 +130,9 @@ public class CulturePropertyEditor extends JPanel {
 	}
 
 	private void addLastOne() {
-		if (editor.getComponent(editor.getComponentCount() - 1) != this) {
-			return;
+		List<Culture> cultures = editor.getConfiguration().getCultures();
+		if (cultures.indexOf(culture) == cultures.size() - 1) {
+			editor.add(new Culture());
 		}
-
-		editor.add(new CulturePropertyEditor(editor, new Culture()));
 	}
 }
