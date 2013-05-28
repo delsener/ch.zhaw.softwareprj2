@@ -75,6 +75,10 @@ public class GraphPanel extends ChartPanel implements
 		setChart(chart);
 
 		setViewAll(false);
+
+		setDomainZoomable(false);
+		setRangeZoomable(false);
+		setMouseZoomable(false);
 	}
 
 	public void setViewAll(boolean flag) {
