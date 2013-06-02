@@ -15,10 +15,10 @@ public class CultureEditor extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel panel;
-	private final GraphPropertyEditor graphPropertyEditor;
+	private final ConfigurationPropertyEditor graphPropertyEditor;
 	private List<Culture> cultures;
 
-	public CultureEditor(GraphPropertyEditor graphPropertyEditor) {
+	public CultureEditor(ConfigurationPropertyEditor graphPropertyEditor) {
 		this.panel = new JPanel();
 		this.cultures = new ArrayList<Culture>();
 		this.graphPropertyEditor = graphPropertyEditor;
@@ -64,7 +64,7 @@ public class CultureEditor extends JScrollPane {
 
 	public Configuration getConfiguration() {
 		return new Configuration(graphPropertyEditor.getGraphProperty(),
-				cultures);
+				cultures, graphPropertyEditor.getIntegrationStep());
 	}
 
 	@Override

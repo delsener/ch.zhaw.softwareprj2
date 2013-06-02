@@ -16,16 +16,20 @@ public class Configuration implements Serializable {
 
 	private final GraphProperty graphProperty;
 	private final List<Culture> cultures;
+	private final double integrationStep;
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param cultures
 	 *            the cultures.
+	 * @param integrationStep
+	 *            the integration step used by the simulation.
 	 */
-	public Configuration(List<Culture> cultures) {
+	public Configuration(List<Culture> cultures, double integrationStep) {
 		this.graphProperty = new GraphProperty(-1, -1);
 		this.cultures = cultures;
+		this.integrationStep = integrationStep;
 	}
 
 	/**
@@ -35,10 +39,14 @@ public class Configuration implements Serializable {
 	 *            the graph properties model.
 	 * @param cultures
 	 *            the cultures.
+	 * @param integrationStep
+	 *            the integration step used by the simulation.
 	 */
-	public Configuration(GraphProperty graphProperty, List<Culture> cultures) {
+	public Configuration(GraphProperty graphProperty, List<Culture> cultures,
+			double integrationStep) {
 		this.graphProperty = graphProperty;
 		this.cultures = cultures;
+		this.integrationStep = integrationStep;
 	}
 
 	/**
@@ -48,13 +56,17 @@ public class Configuration implements Serializable {
 	 *            the graph properties model.
 	 * @param cultures
 	 *            the cultures.
+	 * @param integrationStep
+	 *            the integration step used by the simulation.
 	 */
-	public Configuration(GraphProperty graphProperty, Culture[] cultures) {
+	public Configuration(GraphProperty graphProperty, Culture[] cultures,
+			double integrationStep) {
 		this.graphProperty = graphProperty;
 		this.cultures = new LinkedList<Culture>();
 		for (Culture culture : cultures) {
 			this.cultures.add(culture);
 		}
+		this.integrationStep = integrationStep;
 	}
 
 	public GraphProperty getGraphProperty() {
@@ -64,4 +76,9 @@ public class Configuration implements Serializable {
 	public List<Culture> getCultures() {
 		return cultures;
 	}
+
+	public double getIntegrationStep() {
+		return integrationStep;
+	}
+
 }

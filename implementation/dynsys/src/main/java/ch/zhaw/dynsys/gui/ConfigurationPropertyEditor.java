@@ -9,17 +9,20 @@ import javax.swing.SpringLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import ch.zhaw.dynsys.gui.models.GraphProperty;
+import ch.zhaw.dynsys.simulation.Simulation;
 
-public class GraphPropertyEditor extends JPanel {
+public class ConfigurationPropertyEditor extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private final GraphPanel graphPanel;
 	private GraphProperty graphProperty;
+	private double integrationStep = Simulation.DEFAULT_ITERATION_STEP;
 
+	private JValidatedField integrationStepField;
 	private JValidatedField fromField;
 	private JValidatedField toField;
 
-	public GraphPropertyEditor(final GraphPanel graphPanel,
+	public ConfigurationPropertyEditor(final GraphPanel graphPanel,
 			GraphProperty graphProperty) {
 		this.graphProperty = graphProperty;
 		this.graphPanel = graphPanel;
@@ -33,6 +36,29 @@ public class GraphPropertyEditor extends JPanel {
 
 		JPanel items = new JPanel(new SpringLayout());
 		items.setOpaque(false);
+
+		// Integration step
+		items.add(new JLabel("Integration-Step: "));
+
+		integrationStepField = new JValidatedField(5, "Integration step",
+				String.valueOf(integrationStep),
+				new JValidatedField.Validator() {
+					@Override
+					public boolean validate(String value) {
+						if (StringUtils.isBlank(value)) {
+							return false;
+						}
+
+						try {
+							integrationStep = Double.parseDouble(value);
+						} catch (NumberFormatException numberFormatException) {
+							return false;
+						}
+
+						return true;
+					}
+				});
+		items.add(integrationStepField);
 
 		// Range Axis From
 		items.add(new JLabel("Range Axis: "));
@@ -49,10 +75,10 @@ public class GraphPropertyEditor extends JPanel {
 
 						try {
 							double input = Double.parseDouble(value);
-							GraphPropertyEditor.this.graphProperty
+							ConfigurationPropertyEditor.this.graphProperty
 									.setRangeAxisFrom(input);
 							graphPanel
-									.configure(GraphPropertyEditor.this.graphProperty);
+									.configure(ConfigurationPropertyEditor.this.graphProperty);
 						} catch (NumberFormatException numberFormatException) {
 							return false;
 						}
@@ -77,10 +103,10 @@ public class GraphPropertyEditor extends JPanel {
 
 						try {
 							double input = Double.parseDouble(value);
-							GraphPropertyEditor.this.graphProperty
+							ConfigurationPropertyEditor.this.graphProperty
 									.setRangeAxisTo(input);
 							graphPanel
-									.configure(GraphPropertyEditor.this.graphProperty);
+									.configure(ConfigurationPropertyEditor.this.graphProperty);
 						} catch (NumberFormatException numberFormatException) {
 							return false;
 						}
@@ -92,7 +118,7 @@ public class GraphPropertyEditor extends JPanel {
 
 		add(items);
 
-		SpringUtilities.makeCompactGrid(items, 1, 4, // rows, cols
+		SpringUtilities.makeCompactGrid(items, 1, 6, // rows, cols
 				6, 6, // initX, initY
 				6, 6);
 	}
@@ -109,4 +135,9 @@ public class GraphPropertyEditor extends JPanel {
 	public GraphProperty getGraphProperty() {
 		return graphProperty;
 	}
+
+	public double getIntegrationStep() {
+		return integrationStep;
+	}
+
 }

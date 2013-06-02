@@ -14,7 +14,8 @@ public abstract class SimulationFactory {
 
 	public static Simulation getInstance() {
 		if (simulation == null) {
-			simulation = newInstance(new Configuration(new ArrayList<Culture>()));
+			simulation = newInstance(new Configuration(
+					new ArrayList<Culture>(), Simulation.DEFAULT_ITERATION_STEP));
 		}
 		return simulation;
 	}
@@ -25,7 +26,8 @@ public abstract class SimulationFactory {
 			simulation.stop();
 		}
 
-		simulation = new Simulation(cultures, listener);
+		simulation = new Simulation(cultures, listener,
+				configuration.getIntegrationStep());
 		return simulation;
 	}
 

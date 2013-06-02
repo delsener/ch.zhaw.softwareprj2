@@ -3,6 +3,7 @@ package ch.zhaw.dynsys.simulation.configs;
 import ch.zhaw.dynsys.gui.models.Configuration;
 import ch.zhaw.dynsys.gui.models.GraphProperty;
 import ch.zhaw.dynsys.simulation.Culture;
+import ch.zhaw.dynsys.simulation.Simulation;
 
 public enum SystemConfigurations {
 
@@ -11,13 +12,15 @@ public enum SystemConfigurations {
 					new Culture("a", "0", 1), new Culture("b", "0", 1),
 					new Culture("c", "0", 0), new Culture("d", "0", -0.2),
 					new Culture("H Hefe", "a * H * (Z / (b+Z))", 1),
-					new Culture("Z Zucker", "Z > 0 ? c * H + d * H' : 0", 1) })),
+					new Culture("Z Zucker", "Z > 0 ? c * H + d * H' : 0", 1) },
+			Simulation.DEFAULT_ITERATION_STEP)),
 
 	RABBIT_FOX_SYSTEM("Hase-Fuchs-System", new Configuration(new GraphProperty(
 			-50d, 250d), new Culture[] {
 			new Culture("K Karroten", "20 - 0.2 * h", 50),
 			new Culture("H Hasen", "-1 - 1 * f + 1 * k", 100),
-			new Culture("F Füchse", "-100 + 1 * h", 10) })),
+			new Culture("F Füchse", "-100 + 1 * h", 10) },
+			Simulation.DEFAULT_ITERATION_STEP)),
 
 	ELECTROMAGNETIC_SYSTEM("Elektromagnestische Schwingkreise",
 			new Configuration(new GraphProperty(-1000d, 10000d),
@@ -28,7 +31,8 @@ public enum SystemConfigurations {
 							new Culture("U", "0", 0.00000000000000001),
 							new Culture("I Strom",
 									"U / L - Q / (C * L) - R * I / L", 0),
-							new Culture("Q Ladung", "I", 0) }));
+							new Culture("Q Ladung", "I", 0) },
+					Simulation.DEFAULT_ITERATION_STEP));
 
 	private String name;
 	private Configuration configuration;

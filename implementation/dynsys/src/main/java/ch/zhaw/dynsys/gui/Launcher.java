@@ -33,7 +33,7 @@ public class Launcher {
 		// instance gui
 		final GraphPanel graphPanel = new GraphPanel();
 		SimulationFactory.setListener(graphPanel);
-		final GraphPropertyEditor graphPropertyEditor = new GraphPropertyEditor(
+		final ConfigurationPropertyEditor graphPropertyEditor = new ConfigurationPropertyEditor(
 				graphPanel, new GraphProperty(0, 100));
 		final CultureEditor culturesEditor = new CultureEditor(
 				graphPropertyEditor);

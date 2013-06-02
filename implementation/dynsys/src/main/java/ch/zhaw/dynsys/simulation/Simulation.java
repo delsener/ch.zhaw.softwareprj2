@@ -10,16 +10,21 @@ import org.apache.commons.jexl2.JexlException;
 import ch.zhaw.dynsys.el.utils.ExpressionUtil;
 
 public class Simulation {
+
+	public static final double DEFAULT_ITERATION_STEP = 0.01;
+
 	private List<Culture> cultures;
 	private Object lock = new Object();
 	private boolean running;
 	private Listener listener;
 	private Thread thread = null;
-	private final double ITERATION_STEP = 0.01;
 	private int iteration = 0;
+	private final double integrationStep;
 
-	public Simulation(List<Culture> cultures, Listener listener) {
+	public Simulation(List<Culture> cultures, Listener listener,
+			double integrationStep) {
 		this.cultures = new ArrayList<Culture>();
+		this.integrationStep = integrationStep;
 		this.listener = listener;
 
 		for (Culture culture : cultures) {
@@ -37,7 +42,7 @@ public class Simulation {
 		}
 
 		try {
-			ExpressionUtil.evaluateExpressions(this.cultures, ITERATION_STEP);
+			ExpressionUtil.evaluateExpressions(this.cultures, integrationStep);
 		} catch (Exception e) {
 			String message = e.getMessage().replace(";", ";\n");
 			JOptionPane.showMessageDialog(null, message,
@@ -59,10 +64,11 @@ public class Simulation {
 						for (int i = 0; i < y.length; i++) {
 							y[i] = cultures.get(i).getValue();
 						}
-						
-						listener.updated(iteration*ITERATION_STEP, y);
+
+						listener.updated(iteration * DEFAULT_ITERATION_STEP, y);
 						iteration++;
-						ExpressionUtil.evaluateExpressions(cultures, ITERATION_STEP);
+						ExpressionUtil.evaluateExpressions(cultures,
+								DEFAULT_ITERATION_STEP);
 					} catch (JexlException e) {
 						// error in evaluation, stop simulation
 						stop();
@@ -108,6 +114,7 @@ public class Simulation {
 
 	public static interface Listener {
 		public void start(List<Culture> cultures);
+
 		public void updated(double x, double[] y);
 	}
 

@@ -12,6 +12,7 @@ import org.junit.Test;
 import ch.zhaw.dynsys.gui.models.Configuration;
 import ch.zhaw.dynsys.gui.models.GraphProperty;
 import ch.zhaw.dynsys.simulation.Culture;
+import ch.zhaw.dynsys.simulation.Simulation;
 
 public class ConfigurationPersistenceUtilTest {
 
@@ -24,7 +25,8 @@ public class ConfigurationPersistenceUtilTest {
 		cultures.add(new Culture("C", "2", 11));
 		cultures.add(new Culture("D", "A*C", 20));
 		GraphProperty graphProperty = new GraphProperty(-100, 100);
-		Configuration configuration = new Configuration(graphProperty, cultures);
+		Configuration configuration = new Configuration(graphProperty,
+				cultures, Simulation.DEFAULT_ITERATION_STEP);
 
 		// persist configuration
 		File tmpFile = File.createTempFile("test", "dynsys");
