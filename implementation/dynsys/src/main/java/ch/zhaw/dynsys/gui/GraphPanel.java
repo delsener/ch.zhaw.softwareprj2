@@ -1,13 +1,15 @@
 package ch.zhaw.dynsys.gui;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.SpringLayout;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
@@ -120,15 +122,18 @@ public class GraphPanel extends ChartPanel implements
 				Container glassPane = (Container) frame.getGlassPane();
 				glassPane.removeAll();
 
+				JPanel container = new JPanel();
+				container.setLayout(new BorderLayout());
+
 				legend = new Legend(GraphPanel.this.cultures);
-				SpringLayout springLayout = new SpringLayout();
-				glassPane.setLayout(springLayout);
-				glassPane.add(legend);
+				container.add(legend, BorderLayout.WEST);
+				container.setOpaque(false);
+				container.setBorder(BorderFactory.createEmptyBorder(0, 20, 30,
+						0));
+
+				glassPane.setLayout(new BorderLayout());
+				glassPane.add(container, BorderLayout.SOUTH);
 				glassPane.setVisible(true);
-				springLayout.putConstraint(SpringLayout.SOUTH, legend, 0,
-						SpringLayout.SOUTH, GraphPanel.this);
-				springLayout.putConstraint(SpringLayout.WEST, legend, 20,
-						SpringLayout.WEST, GraphPanel.this);
 
 				// update chart
 				revalidate();

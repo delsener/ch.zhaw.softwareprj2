@@ -29,7 +29,7 @@ public class Legend extends JPanel {
 		setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
 		setBackground(Color.WHITE);
 		setLayout(new SpringLayout());
-		
+
 		fields = new ArrayList<JTextField>(this.cultures.size());
 
 		int i = 0;
@@ -45,10 +45,10 @@ public class Legend extends JPanel {
 			textField.setEditable(false);
 			fields.add(textField);
 
-			JButton minus = new LegendButton(culture, -1, new ImageIcon(getClass()
-					.getClassLoader().getResource("minus.png")));
-			JButton plus = new LegendButton(culture, 1, new ImageIcon(getClass()
-					.getClassLoader().getResource("plus.png")));
+			JButton minus = new LegendButton(culture, -1, new ImageIcon(
+					getClass().getClassLoader().getResource("minus.png")));
+			JButton plus = new LegendButton(culture, 1, new ImageIcon(
+					getClass().getClassLoader().getResource("plus.png")));
 			add(minus);
 			add(plus);
 		}
